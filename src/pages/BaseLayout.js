@@ -4,6 +4,23 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import Footer from "../components/Footer";
 import NavApp from "../components/NavApp";
 import Sidebar from "../components/Sidebar";
+import { color } from "../utils/Helper";
+
+const styles = {
+  row: {
+    minHeight: "100vh",
+  },
+  title: {
+    color: color.primary,
+  },
+  sidebar: {
+    backgroundColor: color.white,
+  },
+  content: {
+    backgroundColor: color.tierary,
+    minHeight: "540px",
+  },
+};
 
 function BaseLayout() {
   const [pageTitle, setPageTitle] = useState("");
@@ -21,23 +38,19 @@ function BaseLayout() {
   }, [path]);
 
   return (
-    <div>
-      <div className="row" style={{ minHeight: "100vh" }}>
-        <div className="col-md-2" style={{ backgroundColor: "salmon" }}>
-          <Sidebar />
+    <div className="row" style={styles.row}>
+      <div className="col-md-2" style={styles.sidebar}>
+        <Sidebar />
+      </div>
+      <div className="col-md-10">
+        <NavApp />
+        <h1 style={styles.title}>{pageTitle}</h1>
+        <h1>test</h1>
+        <div className="my-3 p-3 rounded" style={styles.content}>
+          {path !== "" ? <Breadcrumbs pathname={pathname} /> : <></>}
+          <Outlet />
         </div>
-        <div className="col-md-10">
-          <NavApp />
-          <h1>{pageTitle}</h1>
-          <div
-            className="my-3 p-3 rounded"
-            style={{ backgroundColor: "#EFEFEF", minHeight: "540px" }}
-          >
-            {path !== "" ? <Breadcrumbs pathname={pathname} /> : <></>}
-            <Outlet />
-          </div>
-          <Footer />
-        </div>
+        <Footer />
       </div>
     </div>
   );
