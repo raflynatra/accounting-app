@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getAllPerkiraan = async () => {
   try {
-    let response = await axios.get(`${BASE_URL}`);
+    let response = await axios.get(`${BASE_URL}/perkiraan`);
     return response;
   } catch (error) {
     console.log(error);
@@ -12,7 +12,7 @@ const getAllPerkiraan = async () => {
 
 const getPerkiraanById = async (id) => {
   try {
-    let response = await axios.get(`${BASE_URL}/${id}`);
+    let response = await axios.get(`${BASE_URL}/perkiraan/${id}`);
     return response;
   } catch (error) {
     console.log(error);
@@ -21,7 +21,7 @@ const getPerkiraanById = async (id) => {
 
 const createPerkiraan = async (data) => {
   try {
-    let response = await axios.post(`${BASE_URL}/`);
+    let response = await axios.post(`${BASE_URL}/perkiraan`);
     return response;
   } catch (error) {
     console.log(error);
@@ -30,16 +30,16 @@ const createPerkiraan = async (data) => {
 
 const updatePerkiraan = async (data) => {
   try {
-    let response = await axios.put(`${BASE_URL}`);
+    let response = await axios.put(`${BASE_URL}/perkiraan/${id}`);
     return response;
   } catch (error) {
     console.log(error);
   }
 };
 
-const deletePerkiraan = async (data) => {
+const deletePerkiraan = async (id) => {
   try {
-    let response = await axios.delete(`${BASE_URL}`);
+    let response = await axios.delete(`${BASE_URL}/perkiraan/${id}`);
     return response;
   } catch (error) {
     console.log(error);
