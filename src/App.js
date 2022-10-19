@@ -2,8 +2,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BaseLayout from "./pages/BaseLayout";
 import DashboardPage from "./pages/DashboardPage";
 import JurnalUmumPage from "./pages/JurnalUmumPage";
-import LoginPage from "./pages/LoginPage";
+// import LoginPage from "./pages/LoginPage";
 import PerkiraanPage from "./pages/PerkiraanPage";
+import "./assets/css/App.css";
+import JurnalUmumForm from "./components/JurnalUmum/JurnalUmumForm";
 
 function App() {
   return (
@@ -14,7 +16,7 @@ function App() {
           <Route index element={<DashboardPage />} />
           <Route path="/perkiraan" element={<PerkiraanPage />} />
           <Route path="/jurnal-umum" element={<JurnalUmumPage />} />
-          <Route path="/jurnal-umum/create" element={<JurnalUmumPage />} />
+          <Route path="/jurnal-umum/create" element={<JurnalUmumForm />} />
           <Route path="/jurnal-umum/edit" element={<JurnalUmumPage />} />
         </Route>
       </Routes>
