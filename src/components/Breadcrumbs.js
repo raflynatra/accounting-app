@@ -1,10 +1,24 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { color } from "../utils/Helper";
+
+const styles = {
+  crumbs: {
+    textDecoration: "none",
+    fontWeight: 600,
+    color: color.primary,
+  },
+  crumbsActive: {
+    color: color.primary,
+  },
+};
 
 function Breadcrumbs({ pathname }) {
-  let name = "";
-  let currPath = `/${window.location.pathname.split("/").pop()}`;
+  let location = useLocation();
+  let currPath = `/${location.pathname.split("/").pop()}`;
 
   let items = pathname.map((item) => {
+    let name = "";
     if (item.includes("-")) {
       const words = item.split("-");
 
@@ -15,8 +29,6 @@ function Breadcrumbs({ pathname }) {
         .join(" ");
     } else if (item !== "") {
       name = item[0].toUpperCase() + item.substring(1);
-    } else {
-      name = "Dashboard";
     }
 
     return {
@@ -29,16 +41,28 @@ function Breadcrumbs({ pathname }) {
     <div>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
+          {pathname.length > 0 ? (
+            <li className="breadcrumb-item">
+              <Link to="/" style={styles.crumbs}>
+                Dashboard
+              </Link>
+            </li>
+          ) : (
+            <li
+              className="breadcrumb-item active"
+              aria-current="page"
+              style={styles.crumbsActive}
+            >
+              Dashboard
+            </li>
+          )}
           {items.map((item, index) => {
             if (item.path !== currPath) {
               return (
                 <li className="breadcrumb-item" key={index}>
-                  <a
-                    href={item.path}
-                    style={{ textDecoration: "none", fontWeight: 600 }}
-                  >
+                  <Link to={item.path} style={styles.crumbs}>
                     {item.name}
-                  </a>
+                  </Link>
                 </li>
               );
             } else {
@@ -47,6 +71,7 @@ function Breadcrumbs({ pathname }) {
                   className="breadcrumb-item active"
                   key={index}
                   aria-current="page"
+                  style={styles.crumbsActive}
                 >
                   {item.name}
                 </li>

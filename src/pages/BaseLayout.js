@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Footer from "../components/Footer";
 import NavApp from "../components/NavApp";
@@ -24,18 +24,27 @@ const styles = {
 
 function BaseLayout() {
   const [pageTitle, setPageTitle] = useState("");
-  const pathname = window.location.pathname.split("/");
-  const path = pathname[1];
+  let location = useLocation();
+  let currRoutes = [];
+
+  currRoutes = location.pathname !== "/" ? location.pathname.split("/") : [];
+  if (currRoutes.length > 0) {
+    currRoutes.shift();
+  }
+
+  const path = currRoutes[0];
 
   useEffect(() => {
-    if (path.includes("perkiraan")) {
-      setPageTitle("Perkiraan");
-    } else if (path.includes("jurnal")) {
-      setPageTitle("Jurnal Umum");
+    if (currRoutes.length > 0) {
+      if (path.includes("perkiraan")) {
+        setPageTitle("Perkiraan");
+      } else if (path.includes("jurnal")) {
+        setPageTitle("Jurnal Umum");
+      }
     } else {
       setPageTitle("Dashboard");
     }
-  }, [path]);
+  }, [currRoutes.length, path]);
 
   return (
     <div className="container-fluid">
@@ -47,7 +56,7 @@ function BaseLayout() {
           <NavApp />
           <h1 style={styles.title}>{pageTitle}</h1>
           <div className="my-3 p-3 rounded" style={styles.content}>
-            {path !== "" ? <Breadcrumbs pathname={pathname} /> : <></>}
+            <Breadcrumbs pathname={currRoutes} />
             <Outlet />
           </div>
           <Footer />
