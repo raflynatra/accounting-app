@@ -21,14 +21,14 @@ export const getPerkiraanById = async (id) => {
 
 export const createPerkiraan = async (data) => {
   try {
-    let response = await axios.post(`${BASE_URL}/perkiraan`);
+    let response = await axios.post(`${BASE_URL}/perkiraan`, data);
     return response;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updatePerkiraan = async (data) => {
+export const updatePerkiraan = async (id) => {
   try {
     let response = await axios.put(`${BASE_URL}/perkiraan/${id}`);
     return response;
@@ -40,6 +40,24 @@ export const updatePerkiraan = async (data) => {
 export const deletePerkiraan = async (id) => {
   try {
     let response = await axios.delete(`${BASE_URL}/perkiraan/${id}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllJurnal = async () => {
+  try {
+    let response = await axios.get(`${BASE_URL}/jurnal`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createJurnal = async (data) => {
+  try {
+    let response = await axios.post(`${BASE_URL}/jurnal`, data);
     return response;
   } catch (error) {
     console.log(error);
