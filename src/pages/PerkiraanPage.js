@@ -4,23 +4,6 @@ import { color } from "../utils/Helper";
 import { Link } from "react-router-dom";
 
 
-const styles = {
-  row: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    margin: "20px 0",
-  },
-  button: {
-    backgroundColor: color.primary,
-    color: color.white,
-    textDecoration: "none",
-    "&:hover": {
-      backgroundColor: color.secondary,
-    },
-  },
-};
-
 function PerkiraanPage() {
 
   return (
