@@ -1,0 +1,14 @@
+.side-hover:hover {
+    background-color: #4D3FA6;
+    color: white;
+    border-radius: 25px;
+    
+}
+
+.side-hover {
+    color: #4D3FA6;
+}
+
+.side-hover{
+    text-decoration: none;
+}
