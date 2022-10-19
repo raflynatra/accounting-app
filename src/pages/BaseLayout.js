@@ -13,12 +13,12 @@ const styles = {
   title: {
     color: color.primary,
   },
-  sidebar: {
+  col: {
     backgroundColor: color.white,
   },
   content: {
     backgroundColor: color.tierary,
-    minHeight: "540px",
+    minHeight: "760px",
   },
 };
 
@@ -38,19 +38,20 @@ function BaseLayout() {
   }, [path]);
 
   return (
-    <div className="row" style={styles.row}>
-      <div className="col-md-2" style={styles.sidebar}>
-        <Sidebar />
-      </div>
-      <div className="col-md-10">
-        <NavApp />
-        <h1 style={styles.title}>{pageTitle}</h1>
-        <h1>test</h1>
-        <div className="my-3 p-3 rounded" style={styles.content}>
-          {path !== "" ? <Breadcrumbs pathname={pathname} /> : <></>}
-          <Outlet />
+    <div className="container-fluid">
+      <div className="row" style={styles.row}>
+        <div className="col-md-2" style={styles.col}>
+          <Sidebar />
         </div>
-        <Footer />
+        <div className="col-md-10">
+          <NavApp />
+          <h1 style={styles.title}>{pageTitle}</h1>
+          <div className="my-3 p-3 rounded" style={styles.content}>
+            {path !== "" ? <Breadcrumbs pathname={pathname} /> : <></>}
+            <Outlet />
+          </div>
+          <Footer />
+        </div>
       </div>
     </div>
   );

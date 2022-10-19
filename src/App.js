@@ -2,10 +2,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BaseLayout from "./pages/BaseLayout";
 import DashboardPage from "./pages/DashboardPage";
 import JurnalUmumPage from "./pages/JurnalUmumPage";
+import LoginPage from "./pages/LoginPage";
 import PerkiraanPage from "./pages/PerkiraanPage";
 
 function App() {
   return (
+    // <LoginPage />
     <BrowserRouter>
       <Routes>
         <Route element={<BaseLayout />}>
