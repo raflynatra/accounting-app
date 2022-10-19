@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from 'react';
-
+import "../css/style.css"
+import { Outlet, Link } from "react-router-dom";
 import logo from "../assets/img/app-logo.svg";
 
 
@@ -15,15 +16,12 @@ function Sidebar() {
         </div>
       </div>
     </nav>
-    <div class="container">
-      <div class="container-fluid mt-5" style={{ textAlign: "center" }}>
-        <h3 type="button" className="btn  mb-4 " style={{ color: "#4D3FA6" }}>Dashboard</h3>
-
-        <button type="button" className="btn  mb-4  " style={{ color: "#4D3FA6" }}>Perkiraan</button>
-
-        <button type="button" className="btn  mb-4  " style={{ color: "#4D3FA6" }}>Jurnal Umum</button>
-
-        <button type="button" className="btn " style={{ color: "#4D3FA6" }}> Jurnal Besar</button>
+    <div className="container">
+      <div className="row my-4 mx-4">
+        <Link className="h6 side-hover text-center py-2" to="/">Dashboard</Link>
+        <Link className="h6 side-hover text-center py-2" to="/perkiraan">Perkiraan</Link>
+        <Link className="h6 side-hover text-center py-2" to="/jurnal-umum">Jurnal Umum</Link>
+        <Link className="h6 side-hover text-center py-2" to="/jurnal-besar"> Jurnal Besar</Link>
 
       </div>
     </div>
