@@ -18,7 +18,7 @@ const styles = {
   },
   content: {
     backgroundColor: color.tierary,
-    minHeight: "760px",
+    minHeight: "580px",
   },
 };
 
