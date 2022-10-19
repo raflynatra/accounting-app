@@ -1,7 +1,7 @@
 import { BASE_URL } from "./Helper";
 import axios from "axios";
 
-const getAllPerkiraan = async () => {
+export const getAllPerkiraan = async () => {
   try {
     let response = await axios.get(`${BASE_URL}/perkiraan`);
     return response;
@@ -10,7 +10,7 @@ const getAllPerkiraan = async () => {
   }
 };
 
-const getPerkiraanById = async (id) => {
+export const getPerkiraanById = async (id) => {
   try {
     let response = await axios.get(`${BASE_URL}/perkiraan/${id}`);
     return response;
@@ -19,7 +19,7 @@ const getPerkiraanById = async (id) => {
   }
 };
 
-const createPerkiraan = async (data) => {
+export const createPerkiraan = async (data) => {
   try {
     let response = await axios.post(`${BASE_URL}/perkiraan`);
     return response;
@@ -28,7 +28,7 @@ const createPerkiraan = async (data) => {
   }
 };
 
-const updatePerkiraan = async (data) => {
+export const updatePerkiraan = async (data) => {
   try {
     let response = await axios.put(`${BASE_URL}/perkiraan/${id}`);
     return response;
@@ -37,7 +37,7 @@ const updatePerkiraan = async (data) => {
   }
 };
 
-const deletePerkiraan = async (id) => {
+export const deletePerkiraan = async (id) => {
   try {
     let response = await axios.delete(`${BASE_URL}/perkiraan/${id}`);
     return response;
