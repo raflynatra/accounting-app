@@ -55,9 +55,26 @@ export const getAllJurnal = async () => {
   }
 };
 
+export const getJurnalById = async (id) => {
+  try {
+    let response = await axios.get(`${BASE_URL}/jurnal/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createJurnal = async (data) => {
   try {
     let response = await axios.post(`${BASE_URL}/jurnal`, data);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateJurnal = async (id) => {
+  try {
+    let response = await axios.put(`${BASE_URL}/jurnal/${id}`);
     return response;
   } catch (error) {
     console.log(error);

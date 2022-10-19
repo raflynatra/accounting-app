@@ -25,8 +25,13 @@ function JurnalUmumPage() {
   const [jurnalList, setJurnalList] = useState([]);
   const navigate = useNavigate();
 
+  const getJurnalList = async () => {
+    let response = await getAllJurnal();
+    setJurnalList(response.data.data);
+  };
+
   useEffect(() => {
-    setJurnalList(getAllJurnal());
+    getJurnalList();
   }, []);
 
   return (

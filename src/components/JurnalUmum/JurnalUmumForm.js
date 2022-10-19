@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { createJurnal } from "../../utils/Provider";
+import {
+  createJurnal,
+  getAllPerkiraan,
+  updateJurnal,
+} from "../../utils/Provider";
 
 function JurnalUmumForm({ isEdit }) {
   const [jurnal, setJurnal] = useState({});
   const location = useLocation();
+  const [perkiraanList, setPerkiraanList] = useState([]);
+
+  const getPerkiraanList = async () => {
+    let response = await getAllPerkiraan();
+    setPerkiraanList(response.data.data);
+  };
 
   useState(() => {
     isEdit ? setJurnal(location.state) : setJurnal({});
+    getPerkiraanList();
   }, []);
 
   const handleChange = (e) => {
@@ -17,21 +28,24 @@ function JurnalUmumForm({ isEdit }) {
     setJurnal((values) => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const payload = jurnal;
     console.log(payload);
 
-    // if (isEdit) {
-    // } else {
-    //   let response = createJurnal(payload);
-    //   console.log(response);
-    // }
+    if (isEdit) {
+      let response = await updateJurnal(payload);
+      console.log(response);
+    } else {
+      let response = await createJurnal(payload);
+      console.log(response);
+    }
   };
   return (
     <div className="container">
       <h3>Tambah Jurnal</h3>
+      {JSON.stringify(perkiraanList)}
       <form onSubmit={handleSubmit}>
         <div className="col-md-12 my-2">
           <label className="form-label">Tanggal</label>
@@ -68,13 +82,20 @@ function JurnalUmumForm({ isEdit }) {
 
         <div className="col-md-12 my-2">
           <label className="form-label">Nama Perkiraan Jurnal</label>
-          <input
-            type="text"
-            className="form-control"
+          <select
+            className="form-select"
+            aria-label="Default select example"
             name="namaPerkiraanJurnal"
             value={jurnal.namaPerkiraanJurnal || ""}
             onChange={handleChange}
-          />
+          >
+            <option value="">Choose Perkiraan</option>
+            {perkiraanList.map((item) => (
+              <option value={item.nama_perkiraan} key={item.kode_perkiraan}>
+                {item.nama_perkiraan}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="col-md-12 my-2">
