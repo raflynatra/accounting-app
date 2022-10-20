@@ -1,6 +1,6 @@
 import React from "react";
 
-function JurnalUmumTable({ jurnalList }) {
+function JurnalUmumTable({ jurnalList, handleDelete, navigate }) {
   return (
     <table className="table table-striped">
       <thead>
@@ -18,15 +18,27 @@ function JurnalUmumTable({ jurnalList }) {
         {jurnalList.length > 0 &&
           jurnalList.map((jurnal, index) => (
             <tr key={index}>
-              <td>{jurnal.tanggalJurnal}</td>
+              <td>{new Date(jurnal.tanggalJurnal).toLocaleString()}</td>
               <td>{jurnal.uraian}</td>
               <td>{jurnal.nomerBukti}</td>
               <td>{jurnal.namaPerkiraanJurnal}</td>
               <td>{jurnal.debet}</td>
               <td>{jurnal.kredit}</td>
               <td>
-                <button className="btn btn-warning mx-2">Edit</button>
-                <button className="btn btn-danger mx-2">Delete</button>
+                <button
+                  className="btn btn-warning mx-2"
+                  onClick={() =>
+                    navigate("/jurnal-umum/edit", { state: jurnal })
+                  }
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-danger mx-2"
+                  onClick={() => handleDelete(jurnal)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

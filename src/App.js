@@ -22,7 +22,10 @@ function App() {
 
           <Route path="/jurnal-umum" element={<JurnalUmumPage />} />
           <Route path="/jurnal-umum/create" element={<JurnalUmumForm />} />
-          <Route path="/jurnal-umum/edit" element={<JurnalUmumPage />} />
+          <Route
+            path="/jurnal-umum/edit"
+            element={<JurnalUmumForm isEdit={true} />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

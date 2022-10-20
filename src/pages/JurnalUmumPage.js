@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllJurnal } from "../utils/Provider";
+import { deleteJurnal, getAllJurnal } from "../utils/Provider";
 import { color } from "../utils/Helper";
 import { useNavigate } from "react-router-dom";
 import JurnalUmumTable from "../components/JurnalUmum/JurnalUmumTable";
@@ -27,12 +27,17 @@ function JurnalUmumPage() {
 
   const getJurnalList = async () => {
     let response = await getAllJurnal();
-    setJurnalList(response.data.data);
+    setJurnalList(response.data);
   };
 
   useEffect(() => {
     getJurnalList();
   }, []);
+
+  const handleDelete = async ({ _id }) => {
+    await deleteJurnal(_id);
+    setJurnalList(jurnalList.filter((item) => item._id !== _id));
+  };
 
   return (
     <div className="container">
@@ -55,7 +60,11 @@ function JurnalUmumPage() {
         </div>
       </div>
       <div>
-        <JurnalUmumTable jurnalList={jurnalList} />
+        <JurnalUmumTable
+          jurnalList={jurnalList}
+          handleDelete={handleDelete}
+          navigate={navigate}
+        />
       </div>
     </div>
   );
