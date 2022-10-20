@@ -8,8 +8,8 @@ function Sidebar() {
       <nav className="navbar">
         <div className="container-fluid mt-3">
           <div className="navbar-brand mx-4 h1 flex" href="#">
-            <img src={logo} alt="Logo" className="" />
-            Accounting
+            <img src={logo} alt="Logo" style={{ margin: "0px 5px" }} />
+            <span style={{ color: "#4d3fa6" }}>Accounting</span>
           </div>
         </div>
       </nav>
