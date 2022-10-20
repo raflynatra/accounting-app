@@ -39,12 +39,27 @@ export const PerkiraanTable = () => {
         setPerkiraanTemporary(response.data.data);
     };
 
-    // Searching
+    // SEARCH
     const handleSearch = (e) => {
         let perkiraanSearch = perkiraan.filter(a => a.nama_perkiraan.toLowerCase().includes(e.target.value.toLowerCase()))
         setPerkiraanTemporary(perkiraanSearch)
     }
 
+    // DELETE
+    const deletePerkiraan = async (id) => {
+        // axios.delete(`${BASE_URL}/perkiraan/delete/${id}`).then((e)=>{
+        //     console.log(e)
+        //     getAllPerkiraan();
+        // }).catch(error => {
+        //     console.log("error")
+        // })
+        try {
+            await axios.delete(`${BASE_URL}/perkiraan/delete/${id}`);
+            getAllPerkiraan();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div className='container'>
@@ -76,14 +91,14 @@ export const PerkiraanTable = () => {
                 <tbody>
                     {perkiraanTemporary.map((a, index) => (
 
-                        <tr>
-                            <td>{a.kode_perkiraan}</td>
+                        <tr key={index}>
+                            <td >{a.kode_perkiraan}</td>
                             <td>{a.nama_perkiraan}</td>
                             <td>{a.kelompok_akun}</td>
                             <td>{a.kelompok_laporan}</td>
                             <td>
-                                <button className="btn btn-warning mx-2">Edit</button>
-                                <button className="btn btn-danger mx-2">Delete</button>
+                                <Link to={`/perkiraan/edit/${a.kode_perkiraan}` }className="btn btn-warning mx-2">Edit</Link>
+                                <button className="btn btn-danger mx-2" type="button" onClick={() => { deletePerkiraan(a.kode_perkiraan)}} >Delete</button>
                             </td>
                         </tr>
                     ))}
