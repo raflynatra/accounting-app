@@ -11,3 +11,9 @@
 .side-hover {
   text-decoration: none;
 }
+
+.active-sidebar{
+  background-color: #4d3fa6;
+  color: white;
+  border-radius: 25px;
+}
