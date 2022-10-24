@@ -3,14 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/img/app-logo.svg";
 
 function Sidebar() {
-
-  const [path, setPath] = useState("/")
+  const [path, setPath] = useState("/");
 
   useEffect(() => {
-    setPath(window.location.pathname)
-    console.log(window.location.pathname)
-  }, [window.location.pathname])
-
+    setPath(window.location.pathname);
+  }, [window.location.pathname]);
 
   return (
     <div>
@@ -24,18 +21,46 @@ function Sidebar() {
       </nav>
       <div className="container">
         <div className="row my-4 mx-4">
-          <Link className={path == "/" ? "h6 side-hover text-center py-2 active-sidebar" : "h6 side-hover text-center py-2"} to="/">
+          <Link
+            className={
+              path === "/"
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/"
+          >
             Dashboard
           </Link>
-          <Link className={path == "/perkiraan" ? "h6 side-hover text-center py-2 active-sidebar" : "h6 side-hover text-center py-2"} to="/perkiraan">
+          <Link
+            className={
+              path.includes("/perkiraan")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/perkiraan"
+          >
             Perkiraan
           </Link>
-          <Link className={path == "/jurnal-umum" ? "h6 side-hover text-center py-2 active-sidebar" : "h6 side-hover text-center py-2"} to="/jurnal-umum">
+          <Link
+            className={
+              path.includes("/jurnal-umum")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/jurnal-umum"
+          >
             Jurnal Umum
           </Link>
-          <Link className={path == "/jurnal-besar" ? "h6 side-hover text-center py-2 active-sidebar" : "h6 side-hover text-center py-2"} to="/jurnal-besar">
+          <Link
+            className={
+              path === "/buku-besar"
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/buku-besar"
+          >
             {" "}
-            Jurnal Besar
+            Buku Besar
           </Link>
         </div>
       </div>
