@@ -9,14 +9,18 @@ export const color = {
 };
 
 export const formatDate = (date) => {
-  date = new Date(date);
-  let dayOfMonth = date.getDate();
-  let month = date.getMonth() + 1;
-  let year = date.getFullYear();
-  let hour = date.getHours();
-  let minutes = date.getMinutes();
+  if (date !== "" || date !== undefined) {
+    date = new Date(date);
+    let dayOfMonth = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
 
-  return `${year}-${month}-${dayOfMonth}T${hour}:${minutes}`;
+    return `${year}-${month}-${dayOfMonth}`;
+  } else {
+    console.log(date);
+    date = new Date();
+    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  }
 };
 
 export const validateInput = (data) => {

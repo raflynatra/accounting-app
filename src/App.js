@@ -8,6 +8,7 @@ import "./assets/css/App.css";
 import JurnalUmumForm from "./components/JurnalUmum/JurnalUmumForm";
 import PerkiraanForm from "./components/Perkiraan/PerkiraanForm";
 import PerkiraanEdit from "./components/Perkiraan/PerkiraanEdit";
+import BukuBesarPage from "./pages/BukuBesarPage";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
             path="/jurnal-umum/edit"
             element={<JurnalUmumForm isEdit={true} />}
           />
+
+          <Route path="/buku-besar" element={<BukuBesarPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

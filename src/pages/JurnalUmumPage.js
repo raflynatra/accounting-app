@@ -23,6 +23,7 @@ const styles = {
 
 function JurnalUmumPage() {
   const [jurnalList, setJurnalList] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
 
   const getJurnalList = async () => {
@@ -54,8 +55,9 @@ function JurnalUmumPage() {
         <div>
           <input
             type="text"
-            placeholder="Cari jurnal"
+            placeholder="Cari nomor bukti jurnal"
             className="form-control"
+            onChange={(e) => setSearchValue(e.target.value)}
           />
         </div>
       </div>
@@ -64,6 +66,7 @@ function JurnalUmumPage() {
           jurnalList={jurnalList}
           handleDelete={handleDelete}
           navigate={navigate}
+          searchValue={searchValue}
         />
       </div>
     </div>

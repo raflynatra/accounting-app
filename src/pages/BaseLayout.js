@@ -40,6 +40,8 @@ function BaseLayout() {
         setPageTitle("Perkiraan");
       } else if (path.includes("jurnal")) {
         setPageTitle("Jurnal Umum");
+      } else if (path.includes("buku-besar")) {
+        setPageTitle("Buku Besar");
       }
     } else {
       setPageTitle("Dashboard");

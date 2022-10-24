@@ -26,15 +26,23 @@ function JurnalUmumForm({ isEdit }) {
 
   const handleChange = (e) => {
     const name = e.target.name;
-    const value = e.target.value;
+    let value = e.target.value;
 
     setJurnal((values) => ({ ...values, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { nomerBukti, debet, kredit, ...data } = jurnal;
 
-    const payload = jurnal;
+    const payload = {
+      ...data,
+      nomerBukti: parseInt(nomerBukti),
+      debet: parseInt(debet),
+      kredit: parseInt(kredit),
+    };
+
+    console.log(payload);
 
     // const newErrors = validateInput(payload);
     // console.log(newErrors);
@@ -60,7 +68,7 @@ function JurnalUmumForm({ isEdit }) {
         <div className="col-md-12 my-2">
           <label className="form-label">Tanggal</label>
           <input
-            type="datetime-local"
+            type="date"
             className="form-control"
             name="tanggalJurnal"
             value={formatDate(jurnal.tanggalJurnal) || ""}

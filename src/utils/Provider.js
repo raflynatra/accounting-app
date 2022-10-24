@@ -64,6 +64,33 @@ export const getJurnalById = async (id) => {
   }
 };
 
+export const getJurnalByDate = async (date) => {
+  try {
+    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getJurnalByMonth = async (date) => {
+  try {
+    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getJurnalByYear = async (date) => {
+  try {
+    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createJurnal = async (data) => {
   try {
     let response = await axios.post(`${BASE_URL}/jurnal`, data);
