@@ -19,6 +19,15 @@ const styles = {
     margin: "10px 0",
     border: `1px solid #8da9fc`,
     borderRadius: "10px",
+    minHeight: "102px",
+    position: "relative",
+  },
+  floatText: {
+    position: "absolute",
+    top: -13,
+    left: 15,
+    backgroundColor: color.tierary,
+    padding: "0 5px",
   },
   button: {
     backgroundColor: color.primary,
@@ -33,9 +42,12 @@ const styles = {
 function BukuBesarPage() {
   const [jurnalList, setJurnalList] = useState([]);
   const [perkiraanList, setPerkiraanList] = useState([]);
+  const [total, setTotal] = useState({
+    totalDebet: 0,
+    totalKredit: 0,
+  });
   const [filterValue, setFilterValue] = useState({});
   const [searchPerkiraan, setSearchPerkiraan] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
 
   const getJurnalList = async () => {
@@ -53,9 +65,17 @@ function BukuBesarPage() {
         date = filterValue.filterPeriode;
         response = await getJurnalByDate(date);
       }
+      setTotal({
+        totalDebet: response.totalDebet,
+        totalKredit: response.totalKredit,
+      });
       setJurnalList(response.data);
     } else {
       response = await getAllJurnal();
+      setTotal({
+        totalDebet: response.totalDebet,
+        totalKredit: response.totalKredit,
+      });
       setJurnalList(response.data);
     }
   };
@@ -72,6 +92,11 @@ function BukuBesarPage() {
     setFilterValue((values) => ({ ...values, [name]: value }));
   };
 
+  const clearFilter = () => {
+    setFilterValue({});
+    setSearchPerkiraan("");
+  };
+
   useEffect(() => {
     getJurnalList();
     getPerkiraanList();
@@ -79,28 +104,17 @@ function BukuBesarPage() {
 
   return (
     <div className="container">
-      <div className="form-check form-switch">
-        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
-          Filter
-        </label>
-        <input
-          className="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="flexSwitchCheckDefault"
-          checked={isChecked}
-          onChange={() => setIsChecked(!isChecked)}
-        />
-      </div>
-      {isChecked ? (
-        <div style={styles.row}>
-          <div className="row">
+      <div className="row">
+        <div className="col">
+          <div className="row" style={styles.row}>
+            <div>
+              <h5 style={styles.floatText}>Filter</h5>
+            </div>
             <div className="col">
               <label>Kode Perkiraan</label>
               <select
                 className="form-select form-select-sm"
-                aria-label="multiple select example"
-                name="filterPerkiraan"
+                name="searchPerkiraan"
                 value={searchPerkiraan || ""}
                 onChange={(e) => setSearchPerkiraan(e.target.value)}
               >
@@ -111,6 +125,13 @@ function BukuBesarPage() {
                   </option>
                 ))}
               </select>
+
+              <button
+                className="btn btn-sm btn-warning mt-3"
+                onClick={clearFilter}
+              >
+                Clear Filter
+              </button>
             </div>
             <div className="col">
               <label>Periode</label>
@@ -150,9 +171,31 @@ function BukuBesarPage() {
             </div>
           </div>
         </div>
-      ) : (
-        <></>
-      )}
+        <div className="col">
+          <div className="row pt-4" style={styles.row}>
+            <div>
+              <h5 style={styles.floatText}>Laporan Buku Besar</h5>
+            </div>
+            <div className="col">
+              <h6>Total Debit</h6>
+              <h5>{`Rp${total.totalDebet.toLocaleString("id")}`}</h5>
+            </div>
+            <div className="col">
+              <h6>Total Kredit</h6>
+              <h5>{`Rp${total.totalKredit.toLocaleString("id")}`}</h5>
+            </div>
+            <div className="col">
+              <h6>Total Saldo</h6>
+              <h5>{`Rp${(total.totalDebet - total.totalKredit).toLocaleString(
+                "id"
+              )}`}</h5>
+            </div>
+            <button className="btn btn-sm mt-2" style={styles.button}>
+              Cetak Laporan
+            </button>
+          </div>
+        </div>
+      </div>
       <div>
         <JurnalUmumTable
           jurnalList={jurnalList}

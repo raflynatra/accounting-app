@@ -38,8 +38,8 @@ function JurnalUmumTable({
                 <td>{jurnal.uraian}</td>
                 <td>{jurnal.nomerBukti}</td>
                 <td>{jurnal.namaPerkiraanJurnal}</td>
-                <td>{jurnal.debet}</td>
-                <td>{jurnal.kredit}</td>
+                <td>{`Rp${jurnal.debet.toLocaleString("id")}`}</td>
+                <td>{`Rp${jurnal.kredit.toLocaleString("id")}`}</td>
                 {isBukuBesar ? (
                   <></>
                 ) : (
