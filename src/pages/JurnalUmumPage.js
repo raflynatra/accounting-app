@@ -35,9 +35,9 @@ function JurnalUmumPage() {
     getJurnalList();
   }, []);
 
-  const handleDelete = async ({ _id }) => {
-    await deleteJurnal(_id);
-    setJurnalList(jurnalList.filter((item) => item._id !== _id));
+  const handleDelete = async (id) => {
+    await deleteJurnal(id);
+    setJurnalList(jurnalList.filter((item) => item._id !== id));
   };
 
   return (

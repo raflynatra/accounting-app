@@ -112,7 +112,6 @@ export const updateJurnal = async (payload) => {
 };
 
 export const deleteJurnal = async (id) => {
-  console.log(id);
   try {
     let response = await axios.delete(`${BASE_URL}/jurnal/delete/${id}`);
     return response.data;
