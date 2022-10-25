@@ -9,6 +9,7 @@ import JurnalUmumForm from "./components/JurnalUmum/JurnalUmumForm";
 import PerkiraanForm from "./components/Perkiraan/PerkiraanForm";
 import PerkiraanEdit from "./components/Perkiraan/PerkiraanEdit";
 import BukuBesarPage from "./pages/BukuBesarPage";
+import NeracaSaldoPage from "./pages/NeracaSaldoPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           />
 
           <Route path="/buku-besar" element={<BukuBesarPage />} />
+          <Route path="/neraca-saldo" element={<NeracaSaldoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
