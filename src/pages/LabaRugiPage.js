@@ -4,13 +4,35 @@ import axios from "axios";
 import { color } from "../utils/Helper";
 import { useReactToPrint } from 'react-to-print';
 
+
+
 const styles = {
     row: {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        margin: "20px 0",
-    },
+        padding: "15px",
+        margin: "10px 0",
+        border: `1px solid #8da9fc`,
+        borderRadius: "10px",
+        minHeight: "102px",
+        position: "relative",
+      },
+      row1: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        margin: "10px 0",
+        minHeight: "102px",
+        position: "relative",
+      },
+      floatText: {
+        position: "absolute",
+        top: -13,
+        left: 15,
+        backgroundColor: color.tierary,
+        padding: "0 5px",
+      },
     button: {
         backgroundColor: color.primary,
         color: color.white,
@@ -19,6 +41,7 @@ const styles = {
             backgroundColor: color.secondary,
         },
     },
+    
 };
 
 const LabaRugiPage = () => {
@@ -67,7 +90,7 @@ const LabaRugiPage = () => {
 
     return (
         <div className='container'>
-            <div style={styles.row}>
+            <div style={styles.row1}>
                 <div className="row pt-2" style={styles.row}>
                     <div>
                         <h4 style={styles.floatText}>Laporan Laba Rugi</h4>
