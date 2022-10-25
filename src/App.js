@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BaseLayout from "./pages/BaseLayout";
 import DashboardPage from "./pages/DashboardPage";
 import JurnalUmumPage from "./pages/JurnalUmumPage";
-// import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage";
 import PerkiraanPage from "./pages/PerkiraanPage";
 import "./assets/css/App.css";
 import JurnalUmumForm from "./components/JurnalUmum/JurnalUmumForm";

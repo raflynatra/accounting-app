@@ -1,5 +1,6 @@
 import React from "react";
 import loginIllu from "../assets/img/logo-illu.jpg";
+import logo from "../assets/img/app-logo.svg";
 import { color } from "../utils/Helper";
 
 const styles = {
@@ -22,6 +23,23 @@ const styles = {
     borderRadius: "10px",
     boxShadow: "5px 5px 20px gray",
   },
+  formCol: {
+    backgroundColor: color.secondary,
+    minHeight: "100%",
+    borderRadius: "0 10px 10px 0",
+    padding: "20px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  button: {
+    backgroundColor: color.primary,
+    color: color.white,
+    textDecoration: "none",
+    "&:hover": {
+      backgroundColor: color.secondary,
+    },
+  },
 };
 
 function LoginPage() {
@@ -32,10 +50,52 @@ function LoginPage() {
           <div className="col-md-8">
             <img src={loginIllu} alt="login-illu" style={{ width: "100%" }} />
           </div>
-          <div className="col-md-4">
-            <form>
-              <input type="text" />
-            </form>
+          <div className="col-md-4" style={styles.formCol}>
+            <div className="mx-4 text-center">
+              <div className="d-flex align-items-center justify-content-center">
+                <img
+                  src={logo}
+                  alt="Logo"
+                  style={{ margin: "0px 5px", width: "75px" }}
+                />
+                <span className="h2" style={{ color: "#4d3fa6" }}>
+                  AccountJuco
+                </span>
+              </div>
+              <p
+                className="h5"
+                style={{ color: color.primary, marginTop: "10px" }}
+              >
+                Eliminates your accounting problem!
+              </p>
+            </div>
+            <div className="mt-3">
+              <div className="mb-3">
+                <label for="exampleInputEmail1" className="form-label">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Enter your email here"
+                />
+              </div>
+              <div className="mb-3">
+                <label for="exampleInputPassword1" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Enter your password here"
+                />
+              </div>
+              <div className="d-grid">
+                <button type="submit" className="btn" style={styles.button}>
+                  Submit
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
