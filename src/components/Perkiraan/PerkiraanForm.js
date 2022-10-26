@@ -9,7 +9,13 @@ const PerkiraanForm = () => {
     const [nama_perkiraan, setNamaPerkiraan] = useState("");
     const [kelompok_akun, setKelompokAkun] = useState("");
     const navigate = useNavigate();
-
+    const config = {
+        headers: {
+            "Access-Control-Allow-Origin": true,
+            "Content-Type": "application/json",
+            authorization: localStorage.getItem("token"),
+        },
+    };
     const savePerkiraan = async (e) => {
         e.preventDefault();
         try {
@@ -17,7 +23,7 @@ const PerkiraanForm = () => {
                 kode_perkiraan,
                 nama_perkiraan,
                 kelompok_akun
-            })
+            }, config)
             navigate("/perkiraan");
         } catch (error) {
             console.log(error);

@@ -12,7 +12,13 @@ const PerkiraanEdit = () => {
 
     const navigate = useNavigate();
     const { id } = useParams();
-
+    const config = {
+        headers: {
+            "Access-Control-Allow-Origin": true,
+            "Content-Type": "application/json",
+            authorization: localStorage.getItem("token"),
+        },
+    };
     useEffect(() => {
         getPerkiraanById();
         
@@ -20,7 +26,7 @@ const PerkiraanEdit = () => {
 
 
     const getPerkiraanById =async() =>{
-        const response = await axios.get(`${BASE_URL}/perkiraan/${id}`);
+        const response = await axios.get(`${BASE_URL}/perkiraan/${id}`,config);
         console.log("test", response);
         setKodePerkiraan(response.data.data.kode_perkiraan);
         setNamaPerkiraan(response.data.data.nama_perkiraan);
@@ -36,7 +42,7 @@ const PerkiraanEdit = () => {
                 kode_perkiraan,
                 nama_perkiraan,
                 kelompok_akun
-            })
+            },config)
             navigate("/perkiraan");
         } catch (error) {
             console.log(error);

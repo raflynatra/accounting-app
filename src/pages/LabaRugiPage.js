@@ -45,13 +45,19 @@ const LabaRugiPage = () => {
   const [labaRugi, setLabaRugi] = useState([]);
   const [labaRugiTemporary, setLabaRugiTemporary] = useState([]);
   const [total, setTotal] = useState("");
-
+  const config = {
+    headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("token"),
+    },
+};
   useEffect(() => {
     getAllLabaRugi();
   }, []);
 
   const getAllLabaRugi = async () => {
-    let response = await axios.get(`${BASE_URL}/labarugi`);
+    let response = await axios.get(`${BASE_URL}/labarugi`, config);
     // let dataTotal = {
     //     totalDebet: response.data.totalDebet,
     //     totalKredit: response.data.totalKredit,
