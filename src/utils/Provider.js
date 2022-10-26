@@ -101,7 +101,7 @@ export const getJurnalByYear = async (date) => {
 
 export const createJurnal = async (data) => {
   try {
-    let response = await axios.post(`${BASE_URL}/jurnal`, config, data);
+    let response = await axios.post(`${BASE_URL}/jurnal`, data, config);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -114,8 +114,8 @@ export const updateJurnal = async (payload) => {
   try {
     let response = await axios.put(
       `${BASE_URL}/jurnal/${_id}`,
-      config,
-      payload
+      payload,
+      config
     );
     return response.data;
   } catch (error) {
