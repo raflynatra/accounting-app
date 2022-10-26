@@ -1,6 +1,14 @@
 import { BASE_URL } from "./Helper";
 import axios from "axios";
 
+const config = {
+  headers: {
+    "Access-Control-Allow-Origin": true,
+    "Content-Type": "application/json",
+    authorization: localStorage.getItem("token"),
+  },
+};
+
 export const getAllPerkiraan = async () => {
   try {
     let response = await axios.get(`${BASE_URL}/perkiraan`);
@@ -48,7 +56,7 @@ export const deletePerkiraan = async (id) => {
 
 export const getAllJurnal = async () => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal`);
+    let response = await axios.get(`${BASE_URL}/jurnal`, config);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -57,7 +65,7 @@ export const getAllJurnal = async () => {
 
 export const getJurnalById = async (id) => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal/${id}`);
+    let response = await axios.get(`${BASE_URL}/jurnal/${id}`, config);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -66,7 +74,7 @@ export const getJurnalById = async (id) => {
 
 export const getJurnalByDate = async (date) => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`);
+    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`, config);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -75,7 +83,7 @@ export const getJurnalByDate = async (date) => {
 
 export const getJurnalByMonth = async (date) => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`);
+    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`, config);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -84,7 +92,7 @@ export const getJurnalByMonth = async (date) => {
 
 export const getJurnalByYear = async (date) => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`);
+    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`, config);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -93,7 +101,7 @@ export const getJurnalByYear = async (date) => {
 
 export const createJurnal = async (data) => {
   try {
-    let response = await axios.post(`${BASE_URL}/jurnal`, data);
+    let response = await axios.post(`${BASE_URL}/jurnal`, config, data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -104,7 +112,11 @@ export const updateJurnal = async (payload) => {
   let { _id } = payload;
 
   try {
-    let response = await axios.put(`${BASE_URL}/jurnal/${_id}`, payload);
+    let response = await axios.put(
+      `${BASE_URL}/jurnal/${_id}`,
+      config,
+      payload
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -113,7 +125,19 @@ export const updateJurnal = async (payload) => {
 
 export const deleteJurnal = async (id) => {
   try {
-    let response = await axios.delete(`${BASE_URL}/jurnal/delete/${id}`);
+    let response = await axios.delete(
+      `${BASE_URL}/jurnal/delete/${id}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllNeraca = async () => {
+  try {
+    let response = await axios.get(`${BASE_URL}/neraca`, config);
     return response.data;
   } catch (error) {
     console.log(error);
