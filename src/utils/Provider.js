@@ -11,7 +11,7 @@ const config = {
 
 export const getAllPerkiraan = async () => {
   try {
-    let response = await axios.get(`${BASE_URL}/perkiraan`);
+    let response = await axios.get(`${BASE_URL}/perkiraan`, config);
     return response.data;
   } catch (error) {
     console.log(error);

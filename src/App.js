@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import BaseLayout from "./pages/BaseLayout";
 import DashboardPage from "./pages/DashboardPage";
 import JurnalUmumPage from "./pages/JurnalUmumPage";
@@ -17,12 +17,13 @@ const Protected = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("token")
   );
-  return <>{isAuthenticated ? <BaseLayout /> : <LoginPage />}</>;
+  return (
+    <>{isAuthenticated ? <BaseLayout /> : <Navigate to="/login" replac />}</>
+  );
 };
 
 function App() {
   return (
-    // <LoginPage />
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Protected />}>
@@ -39,6 +40,7 @@ function App() {
           <Route path="/buku-besar" element={<BukuBesarPage />} />
           <Route path="/Laba-rugi" element={<LabaRugi />} />
           <Route path="/neraca-saldo" element={<NeracaSaldoPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>

@@ -55,16 +55,16 @@ function JurnalUmumTable({
         <tbody>
           {jurnalList.length > 0 &&
             jurnalList
-              // .filter(
-              //   (item) =>
-              //     item.nomerBukti !== null &&
-              //     (item.nomerBukti
-              //       .toLowerCase()
-              //       .includes(searchValue.toLowerCase()) ||
-              //       item.namaPerkiraanJurnal
-              //         .toLowerCase()
-              //         .includes(searchValue.toLowerCase()))
-              // )
+              .filter(
+                (item) =>
+                  item.nomerBukti !== null &&
+                  (item.nomerBukti
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase()) ||
+                    item.namaPerkiraanJurnal
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase()))
+              )
               .map((jurnal, index) =>
                 type === "dashboard" ? (
                   index < 5 ? (

@@ -63,6 +63,7 @@ function LoginPage() {
     axios
       .post(`${BASE_URL}/user/signin`, payload, config)
       .then((response) => {
+        console.log(response.data.accessToken);
         localStorage.setItem("token", `JWT ${response.data.accessToken}`);
         navigate("/");
       })
