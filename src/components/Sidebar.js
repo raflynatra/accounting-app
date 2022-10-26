@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../assets/img/app-logo.svg";
 
 function Sidebar() {
@@ -53,7 +53,7 @@ function Sidebar() {
           </Link>
           <Link
             className={
-              path === "/buku-besar"
+              path.includes("/buku-besar")
                 ? "h6 side-hover text-center py-2 active-sidebar"
                 : "h6 side-hover text-center py-2"
             }
@@ -71,6 +71,16 @@ function Sidebar() {
             to="/Laba-rugi"
           >
             Laba Rugi
+          </Link>
+          <Link
+            className={
+              path.includes("/neraca-saldo")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/neraca-saldo"
+          >
+            Neraca Saldo
           </Link>
         </div>
       </div>

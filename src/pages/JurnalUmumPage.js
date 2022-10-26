@@ -42,18 +42,17 @@ function JurnalUmumPage({ type }) {
 
   return (
     <div className="container">
-      {type == 'dashboard' ?
-        <div style={styles.row}>
+      {type === "dashboard" ? (
+        <div style={styles.row} className="d-flex justify-content-end">
           <button
             className="btn"
             style={styles.button}
             onClick={() => navigate("/jurnal-umum")}
           >
-            View Jurnal
+            View More Jurnal
           </button>
         </div>
-
-        :
+      ) : (
         <div style={styles.row}>
           <div>
             <button
@@ -72,9 +71,8 @@ function JurnalUmumPage({ type }) {
               onChange={(e) => setSearchValue(e.target.value)}
             />
           </div>
-
         </div>
-      }
+      )}
       <div>
         <JurnalUmumTable
           jurnalList={jurnalList}

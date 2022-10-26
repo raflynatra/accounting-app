@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../assets/img/app-logo.svg";
 
 function NavApp() {
   return (

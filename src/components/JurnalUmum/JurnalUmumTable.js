@@ -7,7 +7,7 @@ function JurnalUmumTable({
   navigate,
   searchValue,
   isBukuBesar,
-  type
+  type,
 }) {
   const [show, setShow] = useState(false);
   const [currId, setCurrId] = useState({});
@@ -31,47 +31,45 @@ function JurnalUmumTable({
       />
       <table className="table table-striped">
         <thead>
-        {type == 'dashboard' ?
-          <tr>
-            <th>Tanggal</th>
-            <th>Uraian</th>
-            <th>Nomor Bukti</th>
-            <th>Nama Perkiraan Jurnal</th>
-            <th>Debit</th>
-            <th>Kredit</th>
-          </tr>
-          :
-          <tr>
-            <th>Tanggal</th>
-            <th>Uraian</th>
-            <th>Nomor Bukti</th>
-            <th>Nama Perkiraan Jurnal</th>
-            <th>Debit</th>
-            <th>Kredit</th>
-            {isBukuBesar ? <></> : <th>Action</th>}
-          </tr>
-          }
+          {type === "dashboard" ? (
+            <tr>
+              <th>Tanggal</th>
+              <th>Uraian</th>
+              <th>Nomor Bukti</th>
+              <th>Nama Perkiraan Jurnal</th>
+              <th>Debit</th>
+              <th>Kredit</th>
+            </tr>
+          ) : (
+            <tr>
+              <th>Tanggal</th>
+              <th>Uraian</th>
+              <th>Nomor Bukti</th>
+              <th>Nama Perkiraan Jurnal</th>
+              <th>Debit</th>
+              <th>Kredit</th>
+              {isBukuBesar ? <></> : <th>Action</th>}
+            </tr>
+          )}
         </thead>
         <tbody>
-
           {jurnalList.length > 0 &&
-            jurnalList.map((jurnal, index) => (
-              type == 'dashboard' ?
-                index < 5 ?
+            jurnalList.map((jurnal, index) =>
+              type === "dashboard" ? (
+                index < 5 ? (
                   <tr key={index}>
-
                     <td>{new Date(jurnal.tanggalJurnal).toLocaleString()}</td>
                     <td>{jurnal.uraian}</td>
                     <td>{jurnal.nomerBukti}</td>
                     <td>{jurnal.namaPerkiraanJurnal}</td>
                     <td>{jurnal.debet}</td>
                     <td>{jurnal.kredit}</td>
- 
                   </tr>
-                  : ''
-                :
+                ) : (
+                  ""
+                )
+              ) : (
                 <tr key={index}>
-
                   <td>{new Date(jurnal.tanggalJurnal).toLocaleString()}</td>
                   <td>{jurnal.uraian}</td>
                   <td>{jurnal.nomerBukti}</td>
@@ -89,13 +87,14 @@ function JurnalUmumTable({
                     </button>
                     <button
                       className="btn btn-danger mx-2"
-                      onClick={() => handleDelete(jurnal)}
+                      onClick={() => handleShow(jurnal._id)}
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-            ))}
+              )
+            )}
         </tbody>
       </table>
     </>
