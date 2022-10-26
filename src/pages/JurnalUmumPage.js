@@ -21,7 +21,7 @@ const styles = {
   },
 };
 
-function JurnalUmumPage() {
+function JurnalUmumPage({ type }) {
   const [jurnalList, setJurnalList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
@@ -42,31 +42,46 @@ function JurnalUmumPage() {
 
   return (
     <div className="container">
-      <div style={styles.row}>
-        <div>
+      {type == 'dashboard' ?
+        <div style={styles.row}>
           <button
             className="btn"
             style={styles.button}
-            onClick={() => navigate("/jurnal-umum/create")}
+            onClick={() => navigate("/jurnal-umum")}
           >
-            Tambah Jurnal
+            View Jurnal
           </button>
         </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Cari nomor bukti jurnal"
-            className="form-control"
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
+
+        :
+        <div style={styles.row}>
+          <div>
+            <button
+              className="btn"
+              style={styles.button}
+              onClick={() => navigate("/jurnal-umum/create")}
+            >
+              Tambah Jurnal
+            </button>
+          </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Cari nomor bukti jurnal"
+              className="form-control"
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+          </div>
+
         </div>
-      </div>
+      }
       <div>
         <JurnalUmumTable
           jurnalList={jurnalList}
           handleDelete={handleDelete}
           navigate={navigate}
           searchValue={searchValue}
+          type={type}
         />
       </div>
     </div>

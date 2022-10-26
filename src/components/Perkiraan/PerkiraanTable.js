@@ -23,7 +23,7 @@ const styles = {
     },
 };
 
-export const PerkiraanTable = () => {
+export const PerkiraanTable = (props) => {
 
     const [perkiraan, setPerkiraan] = useState([])
     const [perkiraanTemporary, setPerkiraanTemporary] = useState([])
@@ -63,47 +63,81 @@ export const PerkiraanTable = () => {
 
     return (
         <div className='container'>
-            <div style={styles.row}>
-                <div>
-                    <Link to='/perkiraan/create' className='btn btn-primary me-2 ' style={styles.button} type='button'>Tambah Perkiraan</Link>
+            {props.type == 'dashboard' ?
+                <div style={styles.row}>
+                    <div>
+                        <Link to='/perkiraan' className='btn btn-primary me-2 ' style={styles.button} type='button'>View Perkiraan</Link>
+                    </div>
+                </div> 
+                :
+                <div style={styles.row}>
+                    <div>
+                        <Link to='/perkiraan/create' className='btn btn-primary me-2 ' style={styles.button} type='button'>Tambah Perkiraan</Link>
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Cari Perkiraan"
+                            className="form-control"
+                            onChange={(e) => handleSearch(e)}
+                        />
+                    </div>
+
                 </div>
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Cari Perkiraan"
-                        className="form-control"
-                        onChange={(e) => handleSearch(e)}
-                    />
-                </div>
-            </div>
+            }
 
             <table className="table table-striped">
                 <thead>
-                    <tr>
-                        <th scope="col">Kode Perkiraan</th>
-                        <th scope="col">Nama Perkiraan</th>
-                        <th scope="col">Kelompok Akun</th>
-                        <th scope="col">Kelompok Laporan</th>
-                        <th scope="col">Action</th>
+                    {props.type == 'dashboard' ?
 
-                    </tr>
+                        <tr>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Kode Perkiraan</th>
+                            <th scope="col">Nama Perkiraan</th>
+                            <th scope="col">Kelompok Akun</th>
+                            <th scope="col">Kelompok Laporan</th>
+                        </tr>
+                        :
+                        <tr>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Kode Perkiraan</th>
+                            <th scope="col">Nama Perkiraan</th>
+                            <th scope="col">Kelompok Akun</th>
+                            <th scope="col">Kelompok Laporan</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    }
                 </thead>
                 <tbody>
                     {perkiraanTemporary.map((a, index) => (
+                        props.type == 'dashboard'
+                            ?
+                            index < 5 ?
+                                <tr key={index}>
+                                    <td >{new Date(a.updatedAt).toLocaleString()}</td>
+                                    <td >{a.kode_perkiraan}</td>
+                                    <td>{a.nama_perkiraan}</td>
+                                    <td>{a.kelompok_akun}</td>
+                                    <td>{a.kelompok_laporan}</td>
 
-                        <tr key={index}>
-                            <td >{a.kode_perkiraan}</td>
-                            <td>{a.nama_perkiraan}</td>
-                            <td>{a.kelompok_akun}</td>
-                            <td>{a.kelompok_laporan}</td>
-                            <td>
-                                <Link to={`/perkiraan/edit/${a.kode_perkiraan}` }className="btn btn-warning mx-2">Edit</Link>
-                                <button className="btn btn-danger mx-2" type="button" onClick={() => { deletePerkiraan(a.kode_perkiraan)}} >Delete</button>
-                            </td>
-                        </tr>
+                                </tr>
+                                :
+                                ''
+                            :
+                            <tr key={index}>
+                                <td >{new Date(a.updatedAt).toLocaleString()}</td>
+                                <td >{a.kode_perkiraan}</td>
+                                <td>{a.nama_perkiraan}</td>
+                                <td>{a.kelompok_akun}</td>
+                                <td>{a.kelompok_laporan}</td>
+                                <td>
+                                    <Link to={`/perkiraan/edit/${a.kode_perkiraan}`} className="btn btn-warning mx-2">Edit</Link>
+                                    <button className="btn btn-danger mx-2" type="button" onClick={() => { deletePerkiraan(a.kode_perkiraan) }} >Delete</button>
+                                </td>
+                            </tr>
                     ))}
                 </tbody>
             </table>
-        </div>
+        </div >
     )
 }

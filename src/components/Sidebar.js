@@ -62,6 +62,16 @@ function Sidebar() {
             {" "}
             Buku Besar
           </Link>
+          <Link
+            className={
+              path.includes("/Laba-rugi")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/Laba-rugi"
+          >
+            Laba Rugi
+          </Link>
         </div>
       </div>
     </div>
