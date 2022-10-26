@@ -130,7 +130,7 @@ function BukuBesarPage() {
                 className="btn btn-sm btn-warning mt-3"
                 onClick={clearFilter}
               >
-                Clear Filter
+                Hapus Filter
               </button>
             </div>
             <div className="col">

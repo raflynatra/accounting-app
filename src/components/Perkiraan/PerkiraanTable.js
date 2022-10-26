@@ -64,7 +64,8 @@ export const PerkiraanTable = (props) => {
   return (
     <div className="container">
       {props.type === "dashboard" ? (
-        <div style={styles.row} className="d-flex justify-content-end">
+        <div style={styles.row}>
+          <h3>Tabel Perkiraan</h3>
           <div>
             <Link
               to="/perkiraan"
@@ -72,7 +73,7 @@ export const PerkiraanTable = (props) => {
               style={styles.button}
               type="button"
             >
-              View Perkiraan
+              Lihat Tabel Selengkapnya
             </Link>
           </div>
         </div>

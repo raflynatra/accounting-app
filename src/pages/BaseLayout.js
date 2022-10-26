@@ -44,6 +44,8 @@ function BaseLayout() {
         setPageTitle("Buku Besar");
       } else if (path.includes("Laba-rugi")) {
         setPageTitle("Laba Rugi");
+      } else if (path.includes("neraca-saldo")) {
+        setPageTitle("Neraca Saldo");
       }
     } else {
       setPageTitle("Dashboard");

@@ -43,13 +43,14 @@ function JurnalUmumPage({ type }) {
   return (
     <div className="container">
       {type === "dashboard" ? (
-        <div style={styles.row} className="d-flex justify-content-end">
+        <div style={styles.row}>
+          <h3>Tabel Jurnal Umum</h3>
           <button
             className="btn"
             style={styles.button}
             onClick={() => navigate("/jurnal-umum")}
           >
-            View More Jurnal
+            Lihat Tabel Selengkapnya
           </button>
         </div>
       ) : (
