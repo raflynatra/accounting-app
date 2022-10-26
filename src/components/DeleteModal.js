@@ -9,7 +9,10 @@ function DeleteModal({ show, handleClose, handleDelete, currId }) {
       </Modal.Header>
       <Modal.Body>
         <h5>Apakah Anda yakin ingin menghapus data ini?</h5>
-        <p>Data akan terhapus dan perubahan ini tidak dapat bisa diubah.</p>
+        <p>
+          Data akan terhapus dan perubahan ini tidak dapat dikembalikan
+          kemudian.
+        </p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
