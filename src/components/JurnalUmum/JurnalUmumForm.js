@@ -10,7 +10,6 @@ import { formatDate, validateInput } from "../../utils/Helper";
 function JurnalUmumForm({ isEdit }) {
   const [jurnal, setJurnal] = useState({});
   const [perkiraanList, setPerkiraanList] = useState([]);
-  const [errors, setErrors] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -28,38 +27,33 @@ function JurnalUmumForm({ isEdit }) {
     const name = e.target.name;
     let value = e.target.value;
 
-    setJurnal((values) => ({ ...values, [name]: value }));
+    if (name === "nomerBukti" || name === "debet" || name === "kredit") {
+      const re = /^[0-9\b]+$/;
+      if (value === "" || re.test(value)) {
+        setJurnal((values) => ({ ...values, [name]: value }));
+      }
+    } else {
+      setJurnal((values) => ({ ...values, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { nomerBukti, debet, kredit, ...data } = jurnal;
+    const { debet, kredit, ...data } = jurnal;
 
     const payload = {
       ...data,
-      nomerBukti: parseInt(nomerBukti),
       debet: parseInt(debet),
       kredit: parseInt(kredit),
     };
 
-    console.log(payload);
-
-    // const newErrors = validateInput(payload);
-    // console.log(newErrors);
-
-    // if (Object.keys(newErrors).length > 0) {
-    //   setErrors(newErrors);
-    // } else {
     if (isEdit) {
       let response = await updateJurnal(payload);
-      console.log(response);
     } else {
       let response = await createJurnal(payload);
-      console.log(response);
     }
 
     navigate("/jurnal-umum");
-    // }
   };
   return (
     <div className="container">
@@ -75,7 +69,6 @@ function JurnalUmumForm({ isEdit }) {
             onChange={handleChange}
             required
           />
-          <div className="invalid-feedback">{errors.tanggalJurnal}</div>
         </div>
 
         <div className="col-md-12 my-2">

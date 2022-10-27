@@ -39,7 +39,6 @@ export const PerkiraanTable = (props) => {
   const getAllPerkiraan = async () => {
     let response = await axios.get(`${BASE_URL}/perkiraan`, config);
     setPerkiraan(response.data.data);
-    console.log(response.data);
     setPerkiraanTemporary(response.data.data);
   };
 
