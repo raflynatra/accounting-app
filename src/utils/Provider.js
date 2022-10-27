@@ -143,3 +143,12 @@ export const getAllNeraca = async () => {
     console.log(error);
   }
 };
+
+export const getAllArusKas = async () => {
+  try {
+    let response = await axios.get(`${BASE_URL}/aruskas`, config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

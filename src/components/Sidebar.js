@@ -82,6 +82,16 @@ function Sidebar() {
           >
             Neraca Saldo
           </Link>
+          <Link
+            className={
+              path.includes("/arus-kas")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/arus-kas"
+          >
+            Arus Kas
+          </Link>
         </div>
       </div>
     </div>

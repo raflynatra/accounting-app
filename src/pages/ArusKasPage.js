@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { color, formatDate } from "../utils/Helper";
-import { getAllNeraca } from "../utils/Provider";
+import { getAllArusKas } from "../utils/Provider";
 
 const styles = {
   row: {
@@ -32,64 +31,51 @@ const styles = {
   },
 };
 
-function NeracaSaldoPage() {
-  const [neracaList, setNeracaList] = useState([]);
+function ArusKasPage() {
+  const [arusKasList, setArusKasList] = useState([]);
   const [total, setTotal] = useState({
+    totalSaldo: 0,
     totalDebet: 0,
     totalKredit: 0,
-    totalSaldo: 0,
   });
   const [filterValue, setFilterValue] = useState({});
-  const [searchPerkiraan, setSearchPerkiraan] = useState("");
-  const navigate = useNavigate();
 
-  const getNeracaList = async () => {
+  const getArusKasList = async () => {
     let response = "";
     let date = new Date();
 
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        // response = await getJurnalByMonth(date);
+        // response = await
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
-        // response = await getJurnalByYear(date);
       } else {
         date = filterValue.filterPeriode;
-        // response = await getJurnalByDate(date);
       }
-      setTotal({
-        totalDebet: response.totalDebet,
-        totalKredit: response.totalKredit,
-      });
-      setNeracaList(response.data);
-    } else {
-      response = await getAllNeraca();
-      console.log(response);
       setTotal({
         totalDebet: response.totalDebet,
         totalKredit: response.totalKredit,
         totalSaldo: response.saldo,
       });
-      // setNeracaList(response.data);
+      setArusKasList(response.data);
+    } else {
+      response = await getAllArusKas();
+      setArusKasList(response.data);
+      setTotal({
+        totalDebet: response.totalDebet,
+        totalKredit: response.totalKredit,
+        totalSaldo: response.saldo,
+      });
     }
   };
 
-  const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setFilterValue((values) => ({ ...values, [name]: value }));
-  };
-
-  const clearFilter = () => {
-    setFilterValue({});
-    setSearchPerkiraan("");
-  };
-
   useEffect(() => {
-    getNeracaList();
-  }, [filterValue]);
+    getArusKasList();
+  }, []);
+
+  const handleChange = () => {};
+  const clearFilter = () => {};
 
   return (
     <div className="container">
@@ -152,7 +138,7 @@ function NeracaSaldoPage() {
         <div className="col">
           <div className="row pt-4" style={styles.row}>
             <div>
-              <h5 style={styles.floatText}>Laporan Neraca Saldo</h5>
+              <h5 style={styles.floatText}>Laporan Arus Kas</h5>
             </div>
             <div className="col">
               <h6>Total Debit</h6>
@@ -173,18 +159,36 @@ function NeracaSaldoPage() {
         <table className="table table-striped table-hover">
           <thead>
             <tr>
-              <th>Kode Perkiraan</th>
+              <th>Nomor Jurnal</th>
+              <th>Tanggal</th>
+              <th>Nomer Bukti</th>
+              <th>Uraian</th>
               <th>Nama Perkiraan</th>
               <th>Debit</th>
               <th>Kredit</th>
               <th>Saldo</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            {arusKasList.map((kas) => (
+              <tr key={kas._id}>
+                <td>{kas.nomerJurnal[0]}</td>
+                <td>{new Date(kas.tanggalAruskas[0]).toLocaleString()}</td>
+                <td>{kas.nomerBukti[0]}</td>
+                <td>{kas.Uraian[0]}</td>
+                <td>{kas.namaPerkiraanJurnal[0]}</td>
+                <td>{`Rp${kas.Debet[0].toLocaleString("id")}`}</td>
+                <td>{`Rp${kas.Kredit[0].toLocaleString("id")}`}</td>
+                <td>{`Rp${(kas.Debet[0] - kas.Kredit[0]).toLocaleString(
+                  "id"
+                )}`}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
   );
 }
 
-export default NeracaSaldoPage;
+export default ArusKasPage;
