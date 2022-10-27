@@ -25,13 +25,19 @@ const styles = {
 export const PerkiraanTable = (props) => {
   const [perkiraan, setPerkiraan] = useState([]);
   const [perkiraanTemporary, setPerkiraanTemporary] = useState([]);
-
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
   useEffect(() => {
     getAllPerkiraan();
   }, []);
 
   const getAllPerkiraan = async () => {
-    let response = await axios.get(`${BASE_URL}/perkiraan`);
+    let response = await axios.get(`${BASE_URL}/perkiraan`, config);
     setPerkiraan(response.data.data);
     console.log(response.data);
     setPerkiraanTemporary(response.data.data);
@@ -54,7 +60,7 @@ export const PerkiraanTable = (props) => {
     //     console.log("error")
     // })
     try {
-      await axios.delete(`${BASE_URL}/perkiraan/delete/${id}`);
+      await axios.delete(`${BASE_URL}/perkiraan/delete/${id}`, config);
       getAllPerkiraan();
     } catch (error) {
       console.log(error);
