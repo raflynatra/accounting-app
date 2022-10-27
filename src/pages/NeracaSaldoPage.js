@@ -65,13 +65,13 @@ function NeracaSaldoPage() {
       setNeracaList(response.data);
     } else {
       response = await getAllNeraca();
-      console.log(response);
+      console.log(response.data);
       setTotal({
         totalDebet: response.totalDebet,
         totalKredit: response.totalKredit,
         totalSaldo: response.saldo,
       });
-      // setNeracaList(response.data);
+      setNeracaList(response.data);
     }
   };
 
@@ -173,6 +173,7 @@ function NeracaSaldoPage() {
         <table className="table table-striped table-hover">
           <thead>
             <tr>
+              <th>Tanggal</th>
               <th>Kode Perkiraan</th>
               <th>Nama Perkiraan</th>
               <th>Debit</th>
@@ -180,7 +181,20 @@ function NeracaSaldoPage() {
               <th>Saldo</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            {neracaList.map((neraca) => (
+              <tr key={neraca._id}>
+                <td>{neraca.tanggalNeraca[0]}</td>
+                <td>{neraca._id}</td>
+                <td>{neraca.namaPerkiraanJurnal[0]}</td>
+                <td>{`Rp${neraca.Debet.toLocaleString()}`}</td>
+                <td>{`Rp${neraca.Kredit.toLocaleString()}`}</td>
+                <td>{`Rp${(neraca.Debet - neraca.Kredit).toLocaleString(
+                  "id"
+                )}`}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>

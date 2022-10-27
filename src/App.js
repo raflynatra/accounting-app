@@ -12,11 +12,19 @@ import BukuBesarPage from "./pages/BukuBesarPage";
 import NeracaSaldoPage from "./pages/NeracaSaldoPage";
 import LabaRugi from "./pages/LabaRugiPage";
 import ArusKasPage from "./pages/ArusKasPage";
+import jwtDecode from "jwt-decode";
+import { useEffect, useState } from "react";
 
-const Protected = () => {
+const Protected = ({ userRole }) => {
   const isAuthenticated = localStorage.getItem("token");
   return (
-    <>{isAuthenticated ? <BaseLayout /> : <Navigate to="/login" replac />}</>
+    <>
+      {isAuthenticated ? (
+        <BaseLayout userRole={userRole} />
+      ) : (
+        <Navigate to="/login" replac />
+      )}
+    </>
   );
 };
 
@@ -27,20 +35,34 @@ const AccessLoginPageHandler = () => {
 };
 
 function App() {
+  const checkTokenExpiration = () => {
+    const decodeToken = jwtDecode(localStorage.getItem("token"));
+    let currDate = new Date();
+
+    if (decodeToken.exp * 1000 < currDate.getTime()) {
+      alert("Token Expired!");
+      localStorage.removeItem("token");
+    }
+  };
+
+  useEffect(() => {
+    checkTokenExpiration();
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Protected />}>
-          <Route index element={<DashboardPage />} />
-          <Route path="/perkiraan" element={<PerkiraanPage />} />
           <Route path="/perkiraan/create" element={<PerkiraanForm />} />
           <Route path="/perkiraan/edit/:id" element={<PerkiraanEdit />} />
-          <Route path="/jurnal-umum" element={<JurnalUmumPage />} />
           <Route path="/jurnal-umum/create" element={<JurnalUmumForm />} />
           <Route
             path="/jurnal-umum/edit"
             element={<JurnalUmumForm isEdit={true} />}
           />
+          <Route path="/jurnal-umum" element={<JurnalUmumPage />} />
+          <Route index element={<DashboardPage />} />
+          <Route path="/perkiraan" element={<PerkiraanPage />} />
           <Route path="/buku-besar" element={<BukuBesarPage />} />
           <Route path="/Laba-rugi" element={<LabaRugi />} />
           <Route path="/neraca-saldo" element={<NeracaSaldoPage />} />
