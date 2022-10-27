@@ -11,15 +11,19 @@ import PerkiraanEdit from "./components/Perkiraan/PerkiraanEdit";
 import BukuBesarPage from "./pages/BukuBesarPage";
 import NeracaSaldoPage from "./pages/NeracaSaldoPage";
 import LabaRugi from "./pages/LabaRugiPage";
-import { useState } from "react";
+import ArusKasPage from "./pages/ArusKasPage";
 
 const Protected = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("token")
-  );
+  const isAuthenticated = localStorage.getItem("token");
   return (
     <>{isAuthenticated ? <BaseLayout /> : <Navigate to="/login" replac />}</>
   );
+};
+
+const AccessLoginPageHandler = () => {
+  const isAuthenticated = localStorage.getItem("token");
+
+  return <>{isAuthenticated ? <Navigate to="/" /> : <LoginPage />}</>;
 };
 
 function App() {
@@ -40,9 +44,10 @@ function App() {
           <Route path="/buku-besar" element={<BukuBesarPage />} />
           <Route path="/Laba-rugi" element={<LabaRugi />} />
           <Route path="/neraca-saldo" element={<NeracaSaldoPage />} />
+          <Route path="/arus-kas" element={<ArusKasPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<AccessLoginPageHandler />} />
       </Routes>
     </BrowserRouter>
   );
