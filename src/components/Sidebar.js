@@ -92,6 +92,19 @@ function Sidebar() {
           >
             Arus Kas
           </Link>
+          <hr className="mt-2" />
+          <h6 className="h6 text-center ">Master</h6>
+          <hr />
+          <Link
+            className={
+              path.includes("/master-user")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover text-center py-2"
+            }
+            to="/master-user"
+          >
+            User
+          </Link>
         </div>
       </div>
     </div>

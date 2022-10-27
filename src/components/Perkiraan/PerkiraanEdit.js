@@ -21,7 +21,7 @@ const PerkiraanEdit = () => {
     };
     useEffect(() => {
         getPerkiraanById();
-        
+        console.log("aaa",getPerkiraanById());
     },[])
 
 

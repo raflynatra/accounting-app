@@ -4,6 +4,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 // import { } from '../../utils/Provider'
 import { color } from "../../utils/Helper";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 const styles = {
   row: {
@@ -25,6 +27,8 @@ const styles = {
 export const PerkiraanTable = (props) => {
   const [perkiraan, setPerkiraan] = useState([]);
   const [perkiraanTemporary, setPerkiraanTemporary] = useState([]);
+  const [ids, setId] = useState(null)
+
   const config = {
     headers: {
       "Access-Control-Allow-Origin": true,
@@ -32,6 +36,19 @@ export const PerkiraanTable = (props) => {
       authorization: localStorage.getItem("token"),
     },
   };
+  // Modals
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = ((id) => {
+    console.log('tes', id);
+    setId(id)
+    setShow(true)
+  })
+
+
+
+
   useEffect(() => {
     getAllPerkiraan();
   }, []);
@@ -61,6 +78,7 @@ export const PerkiraanTable = (props) => {
     try {
       await axios.delete(`${BASE_URL}/perkiraan/delete/${id}`, config);
       getAllPerkiraan();
+      handleClose()
     } catch (error) {
       console.log(error);
     }
@@ -154,7 +172,11 @@ export const PerkiraanTable = (props) => {
                   >
                     Edit
                   </Link>
-                  <button
+                  <Button variant="danger" onClick={() => handleShow(a.kode_perkiraan)}>
+                    Delete
+                  </Button>
+
+                  {/* <button
                     className="btn btn-danger mx-2"
                     type="button"
                     onClick={() => {
@@ -162,13 +184,37 @@ export const PerkiraanTable = (props) => {
                     }}
                   >
                     Delete
-                  </button>
+                  </button> */}
+
                 </td>
               </tr>
             )
           )}
         </tbody>
       </table>
+
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton className="bg-warning bg-opacity-75">
+          <Modal.Title>Perhatian!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Apakah Anda yakin ingin menghapus data ini?</h5>
+          <p>
+            Data akan terhapus dan perubahan ini tidak dapat dikembalikan
+            kemudian.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Batal
+          </Button>
+          <Button variant="danger" onClick={() => { deletePerkiraan(ids) }}>
+            Iya, benar!
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </div>
   );
 };

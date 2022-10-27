@@ -67,7 +67,7 @@ const LabaRugiPage = () => {
     setTotal({
       totalDebet: response.data.totalDebet,
       totalKredit: response.data.totalKredit,
-      saldo: response.data.saldo,
+      totalSaldo: response.data.totalSaldo,
     });
     // console.log(response.data)
     setLabaRugiTemporary(response.data.data);
@@ -106,7 +106,7 @@ const LabaRugiPage = () => {
           </div>
           <div className="col">
             <h6>Total Saldo</h6>
-            <h5>{`Rp ${parseInt(total.saldo).toLocaleString("id")}`}</h5>
+            <h5>{`Rp ${parseInt(total.totalSaldo).toLocaleString("id")}`}</h5>
           </div>
         </div>
 
@@ -133,7 +133,6 @@ const LabaRugiPage = () => {
               <th scope="col">Tanggal</th>
               <th scope="col">Jenis Biaya</th>
               <th scope="col">Kode Perkiraan</th>
-              <th scope="col">Uraian</th>
               <th scope="col">Debet</th>
               <th scope="col">Kredit</th>
             </tr>
@@ -141,12 +140,11 @@ const LabaRugiPage = () => {
           <tbody>
             {labaRugiTemporary.map((a, index) => (
               <tr key={index}>
-                <td>{new Date(a.tanggalLabaRugi).toLocaleString()}</td>
-                <td>{a._id}</td>
-                <td>{a.kodePerkiraan}</td>
-                <td>{a.uraian}</td>
-                <td>Rp. {a.Debet}</td>
-                <td>Rp. {a.Kredit}</td>
+                <td>{new Date(a._id.tanggalJurnal).toLocaleString()}</td>
+                <td>{a._id.namaPerkiraan}</td>
+                <td>{a._id.kodePerkiraan}</td>
+                <td>Rp. {a.debet}</td>
+                <td>Rp. {a.kredit}</td>
               </tr>
             ))}
           </tbody>
