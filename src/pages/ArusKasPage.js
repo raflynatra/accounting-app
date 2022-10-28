@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { color, formatDate } from "../utils/Helper";
-import { getAllArusKas } from "../utils/Provider";
+import { color, formatDate, formatDateTable } from "../utils/Helper";
+import { getAllArusKas, getArusKasByDate } from "../utils/Provider";
 
 const styles = {
   row: {
@@ -47,16 +47,19 @@ function ArusKasPage() {
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        // response = await
+        response = await getArusKasByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
+        response = await getArusKasByDate(date);
       } else {
-        date = filterValue.filterPeriode;
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        response = await getArusKasByDate(date);
       }
       setTotal({
         totalDebet: response.totalDebet,
         totalKredit: response.totalKredit,
-        totalSaldo: response.saldo,
+        totalSaldo: response.Saldo,
       });
       setArusKasList(response.data);
     } else {
@@ -65,17 +68,25 @@ function ArusKasPage() {
       setTotal({
         totalDebet: response.totalDebet,
         totalKredit: response.totalKredit,
-        totalSaldo: response.saldo,
+        totalSaldo: response.Saldo,
       });
     }
   };
 
   useEffect(() => {
     getArusKasList();
-  }, []);
+  }, [filterValue]);
 
-  const handleChange = () => {};
-  const clearFilter = () => {};
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setFilterValue((values) => ({ ...values, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilterValue({});
+  };
 
   return (
     <div className="container">
@@ -126,7 +137,7 @@ function ArusKasPage() {
                 className="btn btn-sm btn-warning mt-3"
                 onClick={clearFilter}
               >
-                Clear Filter
+                Hapus Filter
               </button>
 
               <button className="btn btn-sm mt-2" style={styles.button}>
@@ -172,16 +183,14 @@ function ArusKasPage() {
           <tbody>
             {arusKasList.map((kas) => (
               <tr key={kas._id}>
-                <td>{kas.nomerJurnal[0]}</td>
-                <td>{new Date(kas.tanggalAruskas[0]).toLocaleString()}</td>
-                <td>{kas.nomerBukti[0]}</td>
-                <td>{kas.Uraian[0]}</td>
-                <td>{kas.namaPerkiraanJurnal[0]}</td>
-                <td>{`Rp${kas.Debet[0].toLocaleString("id")}`}</td>
-                <td>{`Rp${kas.Kredit[0].toLocaleString("id")}`}</td>
-                <td>{`Rp${(kas.Debet[0] - kas.Kredit[0]).toLocaleString(
-                  "id"
-                )}`}</td>
+                <td>{kas.nomerJurnal}</td>
+                <td>{formatDateTable(kas.tanggalJurnal)}</td>
+                <td>{kas.nomerBukti}</td>
+                <td>{kas.uraian}</td>
+                <td>{kas.namaPerkiraanJurnal}</td>
+                <td>{`Rp${kas.debet.toLocaleString("id")}`}</td>
+                <td>{`Rp${kas.kredit.toLocaleString("id")}`}</td>
+                <td>{`Rp${(kas.debet - kas.kredit).toLocaleString("id")}`}</td>
               </tr>
             ))}
           </tbody>
