@@ -1,10 +1,4 @@
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import BaseLayout from "./pages/BaseLayout";
 import DashboardPage from "./pages/DashboardPage";
 import JurnalUmumPage from "./pages/JurnalUmumPage";
@@ -18,8 +12,6 @@ import BukuBesarPage from "./pages/BukuBesarPage";
 import NeracaSaldoPage from "./pages/NeracaSaldoPage";
 import LabaRugi from "./pages/LabaRugiPage";
 import ArusKasPage from "./pages/ArusKasPage";
-import jwtDecode from "jwt-decode";
-import { useEffect, useState } from "react";
 import MasterUserTable from "./components/MasterUser/MasterUserTable";
 import MasterUserForm from "./components/MasterUser/MasterUserForm";
 import MasterUserEdit from "./components/MasterUser/MasterUserEdit";
@@ -27,21 +19,6 @@ import MasterUserEdit from "./components/MasterUser/MasterUserEdit";
 const Protected = ({ userRole }) => {
   const isAuthenticated = localStorage.getItem("token");
 
-  const navigate = useNavigate();
-  const checkTokenExpiration = () => {
-    const decodeToken = jwtDecode(localStorage.getItem("token"));
-    let currDate = new Date();
-
-    if (decodeToken.exp * 1000 < currDate.getTime()) {
-      alert("Token Expired!");
-      navigate("/login");
-      localStorage.removeItem("token");
-    }
-  };
-
-  useEffect(() => {
-    checkTokenExpiration();
-  }, []);
   return (
     <>
       {isAuthenticated ? (

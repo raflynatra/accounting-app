@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Footer from "../components/Footer";
 import NavApp from "../components/NavApp";
@@ -18,15 +18,28 @@ const styles = {
     backgroundColor: color.white,
   },
   content: {
+    height: "581px",
     backgroundColor: color.tierary,
-    minHeight: "580px",
+    overflowY: "auto",
   },
 };
 
 function BaseLayout() {
   const [pageTitle, setPageTitle] = useState("");
-  let location = useLocation();
   let currRoutes = [];
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const checkTokenExpiration = () => {
+    const decodeToken = jwtDecode(localStorage.getItem("token"));
+    let currDate = new Date();
+
+    if (decodeToken.exp * 1000 < currDate.getTime()) {
+      alert("Token Expired!");
+      navigate("/login");
+      localStorage.removeItem("token");
+    }
+  };
 
   currRoutes = location.pathname !== "/" ? location.pathname.split("/") : [];
   if (currRoutes.length > 0) {
@@ -37,6 +50,7 @@ function BaseLayout() {
 
   useEffect(() => {
     if (currRoutes.length > 0) {
+      checkTokenExpiration();
       if (path.includes("perkiraan")) {
         setPageTitle("Perkiraan");
       } else if (path.includes("jurnal")) {
@@ -66,8 +80,7 @@ function BaseLayout() {
           <Sidebar />
         </div>
         <div className="col-md-10">
-          <NavApp />
-          <h1 style={styles.title}>{pageTitle}</h1>
+          <NavApp pageTitle={pageTitle} />
           <div className="my-3 p-3 rounded" style={styles.content}>
             <Breadcrumbs pathname={currRoutes} />
             <Outlet />

@@ -12,14 +12,15 @@ const styles = {
   },
 };
 
-function NavApp() {
+function NavApp({ pageTitle }) {
   const navigate = useNavigate();
   return (
     <div>
       <nav
-        className="navbar navbar-expand-lg mt-2 p-3 rounded d-flex justify-content-end"
+        className="navbar navbar-expand-lg mt-2 p-3 rounded d-flex justify-content-between"
         style={{ backgroundColor: "#A0B4F2", minHeight: "40px" }}
       >
+        <h1 style={{ color: color.primary }}>{pageTitle}</h1>
         <button
           className="btn"
           type="submit"
