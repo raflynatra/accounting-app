@@ -14,6 +14,9 @@ import LabaRugi from "./pages/LabaRugiPage";
 import ArusKasPage from "./pages/ArusKasPage";
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
+import MasterUserTable from "./components/MasterUser/MasterUserTable";
+import MasterUserForm from "./components/MasterUser/MasterUserForm";
+import MasterUserEdit from "./components/MasterUser/MasterUserEdit";
 
 const Protected = ({ userRole }) => {
   const isAuthenticated = localStorage.getItem("token");
@@ -56,6 +59,9 @@ function App() {
           <Route path="/perkiraan/create" element={<PerkiraanForm />} />
           <Route path="/perkiraan/edit/:id" element={<PerkiraanEdit />} />
           <Route path="/jurnal-umum/create" element={<JurnalUmumForm />} />
+          <Route path="/master-user" element={<MasterUserTable />} />
+          <Route path="/master-user/create" element={<MasterUserForm />} />
+          <Route path="/master-user/edit/:id" element={<MasterUserEdit />} />
           <Route
             path="/jurnal-umum/edit"
             element={<JurnalUmumForm isEdit={true} />}
