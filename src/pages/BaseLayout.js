@@ -47,6 +47,12 @@ function BaseLayout() {
         setPageTitle("Laba Rugi");
       } else if (path.includes("neraca-saldo")) {
         setPageTitle("Neraca Saldo");
+      } else if (path.includes("arus-kas")) {
+        setPageTitle("Arus Kas");
+      } else if (path === "neraca") {
+        setPageTitle("Neraca");
+      } else if (path.includes("user")) {
+        setPageTitle("Master User");
       }
     } else {
       setPageTitle("Dashboard");
