@@ -21,7 +21,7 @@ const styles = {
   },
 };
 
-function JurnalUmumPage({ type, userRole }) {
+function JurnalUmumPage({ type }) {
   const [jurnalList, setJurnalList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ function JurnalUmumPage({ type, userRole }) {
           navigate={navigate}
           searchValue={searchValue}
           type={type}
-          isBukuBesar={userRole === "ADMIN" ? false : true}
+          isBukuBesar={false}
         />
       </div>
     </div>
