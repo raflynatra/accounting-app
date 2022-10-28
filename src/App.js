@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import BaseLayout from "./pages/BaseLayout";
 import DashboardPage from "./pages/DashboardPage";
 import JurnalUmumPage from "./pages/JurnalUmumPage";
@@ -20,6 +26,22 @@ import MasterUserEdit from "./components/MasterUser/MasterUserEdit";
 
 const Protected = ({ userRole }) => {
   const isAuthenticated = localStorage.getItem("token");
+
+  const navigate = useNavigate();
+  const checkTokenExpiration = () => {
+    const decodeToken = jwtDecode(localStorage.getItem("token"));
+    let currDate = new Date();
+
+    if (decodeToken.exp * 1000 < currDate.getTime()) {
+      alert("Token Expired!");
+      navigate("/login");
+      localStorage.removeItem("token");
+    }
+  };
+
+  useEffect(() => {
+    checkTokenExpiration();
+  }, []);
   return (
     <>
       {isAuthenticated ? (
@@ -38,20 +60,6 @@ const AccessLoginPageHandler = () => {
 };
 
 function App() {
-  const checkTokenExpiration = () => {
-    const decodeToken = jwtDecode(localStorage.getItem("token"));
-    let currDate = new Date();
-
-    if (decodeToken.exp * 1000 < currDate.getTime()) {
-      alert("Token Expired!");
-      localStorage.removeItem("token");
-    }
-  };
-
-  useEffect(() => {
-    checkTokenExpiration();
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
