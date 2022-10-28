@@ -98,11 +98,19 @@ function BukuBesarPage() {
       }
     } else {
       response = await getAllJurnal();
-      setTotal({
-        totalDebet: response.totalDebet,
-        totalKredit: response.totalKredit,
-      });
-      setJurnalList(response.data);
+      if (response.code !== 200) {
+        setJurnalList({});
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+        });
+      } else {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+        });
+        setJurnalList(response.data);
+      }
     }
   };
 

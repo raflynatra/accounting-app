@@ -59,7 +59,7 @@ export const getAllJurnal = async () => {
     let response = await axios.get(`${BASE_URL}/jurnal`, config);
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -173,7 +173,7 @@ export const getAllNeracaSaldo = async () => {
     let response = await axios.get(`${BASE_URL}/neracasaldo`, config);
     return response.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
