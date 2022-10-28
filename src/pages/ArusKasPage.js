@@ -61,20 +61,38 @@ function ArusKasPage() {
         date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
         response = await getArusKasByDate(date);
       }
-      setTotal({
-        totalDebet: response.totalDebet,
-        totalKredit: response.totalKredit,
-        totalSaldo: response.Saldo,
-      });
-      setArusKasList(response.data);
+      if (response.code === 200) {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+          totalSaldo: response.Saldo,
+        });
+        setArusKasList(response.data);
+      } else {
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+          totalSaldo: 0,
+        });
+        setArusKasList({});
+      }
     } else {
       response = await getAllArusKas();
-      setArusKasList(response.data);
-      setTotal({
-        totalDebet: response.totalDebet,
-        totalKredit: response.totalKredit,
-        totalSaldo: response.Saldo,
-      });
+      if (response.code === 200) {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+          totalSaldo: response.Saldo,
+        });
+        setArusKasList(response.data);
+      } else {
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+          totalSaldo: 0,
+        });
+        setArusKasList({});
+      }
     }
   };
 
@@ -229,18 +247,32 @@ function ArusKasPage() {
             </tr>
           </thead>
           <tbody>
-            {arusKasList.map((kas) => (
-              <tr key={kas._id}>
-                <td>{kas.nomerJurnal}</td>
-                <td>{formatDateTable(kas.tanggalJurnal)}</td>
-                <td>{kas.nomerBukti}</td>
-                <td>{kas.uraian}</td>
-                <td>{kas.namaPerkiraanJurnal}</td>
-                <td>{`Rp${kas.debet.toLocaleString("id")}`}</td>
-                <td>{`Rp${kas.kredit.toLocaleString("id")}`}</td>
-                <td>{`Rp${(kas.debet - kas.kredit).toLocaleString("id")}`}</td>
+            {arusKasList.length > 0 ? (
+              arusKasList.map((kas) => (
+                <tr key={kas._id}>
+                  <td>{kas.nomerJurnal}</td>
+                  <td>{formatDateTable(kas.tanggalJurnal)}</td>
+                  <td>{kas.nomerBukti}</td>
+                  <td>{kas.uraian}</td>
+                  <td>{kas.namaPerkiraanJurnal}</td>
+                  <td>{`Rp${kas.debet.toLocaleString("id")}`}</td>
+                  <td>{`Rp${kas.kredit.toLocaleString("id")}`}</td>
+                  <td>{`Rp${(kas.debet - kas.kredit).toLocaleString(
+                    "id"
+                  )}`}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center"
+                  style={{ border: 0, backgroundColor: color.tierary }}
+                >
+                  Data tidak tersedia
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

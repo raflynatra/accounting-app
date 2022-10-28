@@ -226,7 +226,7 @@ export const getAllArusKas = async () => {
     let response = await axios.get(`${BASE_URL}/aruskas`, config);
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -238,7 +238,7 @@ export const getArusKasByDate = async (date) => {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
