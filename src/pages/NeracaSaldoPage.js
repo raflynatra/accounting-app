@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { color, formatDate } from "../utils/Helper";
-import { getAllNeraca } from "../utils/Provider";
+import { getAllNeracaSaldo, getNeracaSaldoByDate } from "../utils/Provider";
 
 const styles = {
   row: {
@@ -33,45 +32,61 @@ const styles = {
 };
 
 function NeracaSaldoPage() {
-  const [neracaList, setNeracaList] = useState([]);
+  const [neracaSaldoList, setNeracaSaldoList] = useState([]);
   const [total, setTotal] = useState({
     totalDebet: 0,
     totalKredit: 0,
     totalSaldo: 0,
   });
   const [filterValue, setFilterValue] = useState({});
-  const [searchPerkiraan, setSearchPerkiraan] = useState("");
-  const navigate = useNavigate();
 
-  const getNeracaList = async () => {
+  const getNeracaSaldoList = async () => {
     let response = "";
     let date = new Date();
 
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        // response = await getJurnalByMonth(date);
+        response = await getNeracaSaldoByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
-        // response = await getJurnalByYear(date);
+        response = await getNeracaSaldoByDate(date);
       } else {
         date = filterValue.filterPeriode;
-        // response = await getJurnalByDate(date);
+        response = await getNeracaSaldoByDate(date);
       }
-      setTotal({
-        totalDebet: response.totalDebet,
-        totalKredit: response.totalKredit,
-      });
-      setNeracaList(response.data);
+      if (response.code === 200) {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+          totalSaldo: response.Saldo,
+        });
+        setNeracaSaldoList(response.data);
+      } else {
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+          totalSaldo: 0,
+        });
+        setNeracaSaldoList({});
+      }
     } else {
-      response = await getAllNeraca();
-      console.log(response.data);
-      setTotal({
-        totalDebet: response.totalDebet,
-        totalKredit: response.totalKredit,
-        totalSaldo: response.saldo,
-      });
-      setNeracaList(response.data);
+      response = await getAllNeracaSaldo();
+      if (response.code === 200) {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+          totalSaldo: response.Saldo,
+        });
+        setNeracaSaldoList(response.data);
+      } else {
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+          totalSaldo: 0,
+        });
+        setNeracaSaldoList({});
+      }
     }
   };
 
@@ -84,11 +99,10 @@ function NeracaSaldoPage() {
 
   const clearFilter = () => {
     setFilterValue({});
-    setSearchPerkiraan("");
   };
 
   useEffect(() => {
-    getNeracaList();
+    getNeracaSaldoList();
   }, [filterValue]);
 
   return (
@@ -140,7 +154,7 @@ function NeracaSaldoPage() {
                 className="btn btn-sm btn-warning mt-3"
                 onClick={clearFilter}
               >
-                Clear Filter
+                Hapus Filter
               </button>
 
               <button className="btn btn-sm mt-2" style={styles.button}>
@@ -173,7 +187,6 @@ function NeracaSaldoPage() {
         <table className="table table-striped table-hover">
           <thead>
             <tr>
-              <th>Tanggal</th>
               <th>Kode Perkiraan</th>
               <th>Nama Perkiraan</th>
               <th>Debit</th>
@@ -182,18 +195,29 @@ function NeracaSaldoPage() {
             </tr>
           </thead>
           <tbody>
-            {neracaList.map((neraca) => (
-              <tr key={neraca._id}>
-                <td>{neraca.tanggalNeraca[0]}</td>
-                <td>{neraca._id}</td>
-                <td>{neraca.namaPerkiraanJurnal[0]}</td>
-                <td>{`Rp${neraca.Debet.toLocaleString()}`}</td>
-                <td>{`Rp${neraca.Kredit.toLocaleString()}`}</td>
-                <td>{`Rp${(neraca.Debet - neraca.Kredit).toLocaleString(
-                  "id"
-                )}`}</td>
+            {neracaSaldoList.length > 0 ? (
+              neracaSaldoList.map((neraca, index) => (
+                <tr key={index}>
+                  <td>{neraca._id.kodePerkiraan}</td>
+                  <td>{neraca._id.namaPerkiraan}</td>
+                  <td>{`Rp${neraca.Debet.toLocaleString()}`}</td>
+                  <td>{`Rp${neraca.Kredit.toLocaleString()}`}</td>
+                  <td>{`Rp${(neraca.Debet - neraca.Kredit).toLocaleString(
+                    "id"
+                  )}`}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center"
+                  style={{ border: 0, backgroundColor: color.tierary }}
+                >
+                  Data tidak tersedia
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
