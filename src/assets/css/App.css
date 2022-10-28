@@ -12,8 +12,20 @@
   text-decoration: none;
 }
 
-.active-sidebar{
+.active-sidebar {
   background-color: #4d3fa6;
   color: white;
   border-radius: 25px;
+}
+
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th {
+  background-color: #c9d3f2;
+  filter: contrast(0.9);
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #c9d3f2;
+  filter: contrast(1.15);
 }

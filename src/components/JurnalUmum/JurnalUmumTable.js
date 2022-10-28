@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DeleteModal from "../DeleteModal";
+import { color } from "../../utils/Helper";
 
 function JurnalUmumTable({
   jurnalList,
@@ -53,17 +54,14 @@ function JurnalUmumTable({
           )}
         </thead>
         <tbody>
-          {jurnalList.length > 0 &&
+          {jurnalList.length > 0 ? (
             jurnalList
               .filter(
                 (item) =>
                   item.nomerBukti !== null &&
-                  (item.nomerBukti
+                  item.nomerBukti
                     .toLowerCase()
-                    .includes(searchValue.toLowerCase()) ||
-                    item.namaPerkiraanJurnal
-                      .toLowerCase()
-                      .includes(searchValue.toLowerCase()))
+                    .includes(searchValue.toLowerCase())
               )
               .map((jurnal, index) =>
                 type === "dashboard" ? (
@@ -109,7 +107,18 @@ function JurnalUmumTable({
                     )}
                   </tr>
                 )
-              )}
+              )
+          ) : (
+            <tr>
+              <td
+                colSpan={6}
+                className="text-center"
+                style={{ border: 0, backgroundColor: color.tierary }}
+              >
+                Data tidak tersedia
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </>
