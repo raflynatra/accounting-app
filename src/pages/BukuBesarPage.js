@@ -6,8 +6,10 @@ import {
   getAllJurnal,
   getAllPerkiraan,
   getJurnalByDate,
-  getJurnalByMonth,
-  getJurnalByYear,
+  getJurnalByKodePerkiraan,
+  getJurnalPDF,
+  getJurnalPDFByDate,
+  getJurnalPDFByKodePerkiraan,
 } from "../utils/Provider";
 
 const styles = {
@@ -57,19 +59,43 @@ function BukuBesarPage() {
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        response = await getJurnalByMonth(date);
+        response = await getJurnalByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
-        response = await getJurnalByYear(date);
+        response = await getJurnalByDate(date);
       } else {
-        date = filterValue.filterPeriode;
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
         response = await getJurnalByDate(date);
       }
-      setTotal({
-        totalDebet: response.totalDebet,
-        totalKredit: response.totalKredit,
-      });
-      setJurnalList(response.data);
+      if (response.code !== 200) {
+        setJurnalList({});
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+        });
+      } else {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+        });
+        setJurnalList(response.data);
+      }
+    } else if (searchPerkiraan.length > 0) {
+      response = await getJurnalByKodePerkiraan(searchPerkiraan);
+      if (response.code !== 200) {
+        setJurnalList({});
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+        });
+      } else {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+        });
+        setJurnalList(response.data);
+      }
     } else {
       response = await getAllJurnal();
       setTotal({
@@ -89,7 +115,11 @@ function BukuBesarPage() {
     const name = e.target.name;
     const value = e.target.value;
 
-    setFilterValue((values) => ({ ...values, [name]: value }));
+    if (name === "searchPerkiraan") {
+      setSearchPerkiraan(value);
+    } else {
+      setFilterValue((values) => ({ ...values, [name]: value }));
+    }
   };
 
   const clearFilter = () => {
@@ -100,7 +130,61 @@ function BukuBesarPage() {
   useEffect(() => {
     getJurnalList();
     getPerkiraanList();
-  }, [filterValue]);
+  }, [filterValue, searchPerkiraan]);
+
+  const downloadPDF = async () => {
+    let response = "";
+    let date = new Date();
+
+    if (Object.keys(filterValue).length > 0) {
+      if (filterValue.filterPeriode === "bulanan") {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}`;
+        response = await getJurnalPDFByDate(date);
+      } else if (filterValue.filterPeriode === "tahunan") {
+        date = date.getFullYear();
+        response = await getJurnalPDFByDate(date);
+      } else {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        response = await getJurnalPDFByDate(date);
+      }
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `LAPORAN-BUKU_BESAR-ACCOUTNING-${date}.pdf`
+        );
+        document.body.appendChild(link);
+        link.click();
+      }
+    } else if (searchPerkiraan.length > 0) {
+      response = await getJurnalPDFByKodePerkiraan(searchPerkiraan);
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `LAPORAN-BUKU_BESAR-ACCOUTNING-${searchPerkiraan}.pdf`
+        );
+        document.body.appendChild(link);
+        link.click();
+      } else {
+        console.log(response);
+      }
+    } else {
+      response = await getJurnalPDF();
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `LAPORAN-BUKU_BESAR-ACCOUTNING.pdf`);
+        document.body.appendChild(link);
+        link.click();
+      }
+    }
+  };
 
   return (
     <div className="container">
@@ -116,11 +200,11 @@ function BukuBesarPage() {
                 className="form-select form-select-sm"
                 name="searchPerkiraan"
                 value={searchPerkiraan || ""}
-                onChange={(e) => setSearchPerkiraan(e.target.value)}
+                onChange={handleChange}
               >
                 <option value="">Pilih Perkiraan</option>
                 {perkiraanList.map((item) => (
-                  <option value={item.nama_perkiraan} key={item.kode_perkiraan}>
+                  <option value={item.kode_perkiraan} key={item.kode_perkiraan}>
                     {`${item.kode_perkiraan} - ${item.nama_perkiraan}`}
                   </option>
                 ))}
@@ -190,7 +274,11 @@ function BukuBesarPage() {
                 "id"
               )}`}</h5>
             </div>
-            <button className="btn btn-sm mt-2" style={styles.button}>
+            <button
+              className="btn btn-sm mt-2"
+              style={styles.button}
+              onClick={downloadPDF}
+            >
               Cetak Laporan
             </button>
           </div>
@@ -200,7 +288,7 @@ function BukuBesarPage() {
         <JurnalUmumTable
           jurnalList={jurnalList}
           navigate={navigate}
-          searchValue={searchPerkiraan}
+          searchValue=""
           isBukuBesar={true}
         />
       </div>

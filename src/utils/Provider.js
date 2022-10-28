@@ -63,12 +63,15 @@ export const getAllJurnal = async () => {
   }
 };
 
-export const getJurnalById = async (id) => {
+export const getJurnalByKodePerkiraan = async (kodePerkiraan) => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal/${id}`, config);
+    let response = await axios.get(
+      `${BASE_URL}/jurnal/${kodePerkiraan}`,
+      config
+    );
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -77,25 +80,55 @@ export const getJurnalByDate = async (date) => {
     let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`, config);
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
-export const getJurnalByMonth = async (date) => {
+export const getJurnalPDF = async () => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`, config);
-    return response.data;
+    let response = await axios({
+      url: `${BASE_URL}/laporan/jurnal`,
+      method: "GET",
+      responseType: "blob", // important
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    return error.response;
   }
 };
 
-export const getJurnalByYear = async (date) => {
+export const getJurnalPDFByKodePerkiraan = async (kodePerkiraan) => {
   try {
-    let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`, config);
-    return response.data;
+    let response = await axios({
+      url: `${BASE_URL}/laporan/jurnal/perkiraan/${kodePerkiraan}`,
+      method: "GET",
+      responseType: "blob", // important
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    return error.response;
+  }
+};
+
+export const getJurnalPDFByDate = async (date) => {
+  try {
+    let response = await axios({
+      url: `${BASE_URL}/laporan/jurnal/${date}`,
+      method: "GET",
+      responseType: "blob", // important
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
   }
 };
 
@@ -135,9 +168,45 @@ export const deleteJurnal = async (id) => {
   }
 };
 
-export const getAllNeraca = async () => {
+export const getAllNeracaSaldo = async () => {
   try {
-    let response = await axios.get(`${BASE_URL}/neraca`, config);
+    let response = await axios.get(`${BASE_URL}/neracasaldo`, config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getNeracaSaldoByDate = async (date) => {
+  try {
+    let response = await axios.get(
+      `${BASE_URL}/neracasaldo/search/${date}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getNeracaSaldoByMonth = async (date) => {
+  try {
+    let response = await axios.get(
+      `${BASE_URL}/neracasaldo/search/${date}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getNeracaSaldoByYear = async (date) => {
+  try {
+    let response = await axios.get(
+      `${BASE_URL}/neracasaldo/search/${date}`,
+      config
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -147,6 +216,42 @@ export const getAllNeraca = async () => {
 export const getAllArusKas = async () => {
   try {
     let response = await axios.get(`${BASE_URL}/aruskas`, config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getArusKasByDate = async (date) => {
+  try {
+    let response = await axios.get(
+      `${BASE_URL}/aruskas/search/${date}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getArusKasByMonth = async (date) => {
+  try {
+    let response = await axios.get(
+      `${BASE_URL}/aruskas/search/${date}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getArusKasByYear = async (date) => {
+  try {
+    let response = await axios.get(
+      `${BASE_URL}/aruskas/search/${date}`,
+      config
+    );
     return response.data;
   } catch (error) {
     console.log(error);
