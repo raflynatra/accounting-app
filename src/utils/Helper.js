@@ -23,6 +23,38 @@ export const formatDate = (date) => {
   }
 };
 
+export const formatDateTable = (date) => {
+  const monthName = {
+    1: "Januari",
+    2: "Februari",
+    3: "Maret",
+    4: "April",
+    5: "Mei",
+    6: "Juni",
+    7: "Juli",
+    8: "Agustus",
+    9: "September",
+    10: "Oktober",
+    11: "November",
+    12: "Desember",
+  };
+
+  if (date !== "" || date !== undefined) {
+    date = new Date(date);
+    let dayOfMonth = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    return `${dayOfMonth} ${monthName[month]} ${year}`;
+  } else {
+    console.log(date);
+    date = new Date();
+    return `${date.getDate()} ${
+      monthName[date.getMonth()]
+    } ${date.getFullYear()}`;
+  }
+};
+
 export const validateInput = (data) => {
   const key = Object.keys(data);
   let newErrors = {};
