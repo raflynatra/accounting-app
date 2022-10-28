@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/img/app-logo.svg";
+import { color } from "../utils/Helper";
 
 function Sidebar() {
   const [path, setPath] = useState("/");
@@ -31,31 +32,15 @@ function Sidebar() {
           >
             Dashboard
           </Link>
-          <Link
-            className={
-              path.includes("/perkiraan")
-                ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover text-center py-2"
-            }
-            to="/perkiraan"
-          >
-            Perkiraan
-          </Link>
-          <Link
-            className={
-              path.includes("/jurnal-umum")
-                ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover text-center py-2"
-            }
-            to="/jurnal-umum"
-          >
-            Jurnal Umum
-          </Link>
+          <h6 className="h5" style={{ padding: 0, color: "#4d3fa6" }}>
+            Laporan
+          </h6>
+          <hr />
           <Link
             className={
               path.includes("/buku-besar")
                 ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover text-center py-2"
+                : "h6 side-hover py-2"
             }
             to="/buku-besar"
           >
@@ -66,7 +51,7 @@ function Sidebar() {
             className={
               path.includes("/Laba-rugi")
                 ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover text-center py-2"
+                : "h6 side-hover py-2"
             }
             to="/Laba-rugi"
           >
@@ -76,7 +61,7 @@ function Sidebar() {
             className={
               path.includes("/neraca-saldo")
                 ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover text-center py-2"
+                : "h6 side-hover py-2"
             }
             to="/neraca-saldo"
           >
@@ -86,20 +71,41 @@ function Sidebar() {
             className={
               path.includes("/arus-kas")
                 ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover text-center py-2"
+                : "h6 side-hover py-2"
             }
             to="/arus-kas"
           >
             Arus Kas
           </Link>
-          <hr className="mt-2" />
-          <h6 className="h6 text-center ">Master</h6>
+          <h6 className="h5" style={{ padding: 0, color: "#4d3fa6" }}>
+            Master
+          </h6>
           <hr />
+          <Link
+            className={
+              path.includes("/perkiraan")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover py-2"
+            }
+            to="/perkiraan"
+          >
+            Perkiraan
+          </Link>
+          <Link
+            className={
+              path.includes("/jurnal-umum")
+                ? "h6 side-hover text-center py-2 active-sidebar"
+                : "h6 side-hover py-2"
+            }
+            to="/jurnal-umum"
+          >
+            Jurnal Umum
+          </Link>
           <Link
             className={
               path.includes("/master-user")
                 ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover text-center py-2"
+                : "h6 side-hover py-2"
             }
             to="/master-user"
           >

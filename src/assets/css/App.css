@@ -2,14 +2,13 @@
   background-color: #4d3fa6;
   color: white;
   border-radius: 25px;
+  text-align: center;
 }
 
 .side-hover {
   color: #4d3fa6;
-}
-
-.side-hover {
   text-decoration: none;
+  text-align: end;
 }
 
 .active-sidebar {
