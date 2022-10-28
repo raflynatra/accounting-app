@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { color, formatDate, formatDateTable } from "../utils/Helper";
-import { getAllArusKas, getArusKasByDate } from "../utils/Provider";
+import {
+  getAllArusKas,
+  getArusKasByDate,
+  getArusKasPDF,
+  getArusKasPDFByDate,
+} from "../utils/Provider";
 
 const styles = {
   row: {
@@ -88,6 +93,45 @@ function ArusKasPage() {
     setFilterValue({});
   };
 
+  const downloadPDF = async () => {
+    let response = "";
+    let date = new Date();
+
+    if (Object.keys(filterValue).length > 0) {
+      if (filterValue.filterPeriode === "bulanan") {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}`;
+        response = await getArusKasPDFByDate(date);
+      } else if (filterValue.filterPeriode === "tahunan") {
+        date = date.getFullYear();
+        response = await getArusKasPDFByDate(date);
+      } else {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        response = await getArusKasPDFByDate(date);
+      }
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `LAPORAN-BUKU_BESAR-ACCOUTNING-${date}.pdf`
+        );
+        document.body.appendChild(link);
+        link.click();
+      }
+    } else {
+      response = await getArusKasPDF();
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `LAPORAN-BUKU_BESAR-ACCOUTNING.pdf`);
+        document.body.appendChild(link);
+        link.click();
+      }
+    }
+  };
+
   return (
     <div className="container">
       <div className="row">
@@ -140,7 +184,11 @@ function ArusKasPage() {
                 Hapus Filter
               </button>
 
-              <button className="btn btn-sm mt-2" style={styles.button}>
+              <button
+                className="btn btn-sm mt-2"
+                style={styles.button}
+                onClick={downloadPDF}
+              >
                 Cetak Laporan
               </button>
             </div>

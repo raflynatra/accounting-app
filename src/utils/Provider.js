@@ -173,7 +173,7 @@ export const getAllNeracaSaldo = async () => {
     let response = await axios.get(`${BASE_URL}/neracasaldo`, config);
     return response.data;
   } catch (error) {
-    // console.log(error);
+    return error.response.data;
   }
 };
 
@@ -185,31 +185,39 @@ export const getNeracaSaldoByDate = async (date) => {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
-export const getNeracaSaldoByMonth = async (date) => {
+export const getNeracaSaldoPDF = async () => {
   try {
-    let response = await axios.get(
-      `${BASE_URL}/neracasaldo/search/${date}`,
-      config
-    );
-    return response.data;
+    let response = await axios({
+      url: `${BASE_URL}/laporan/neracasaldo`,
+      method: "GET",
+      responseType: "blob", // important
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    return error.response;
   }
 };
 
-export const getNeracaSaldoByYear = async (date) => {
+export const getNeracaSaldoPDFByDate = async (date) => {
   try {
-    let response = await axios.get(
-      `${BASE_URL}/neracasaldo/search/${date}`,
-      config
-    );
-    return response.data;
+    let response = await axios({
+      url: `${BASE_URL}/laporan/neracasaldo/${date}`,
+      method: "GET",
+      responseType: "blob", // important
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    return error.response;
   }
 };
 
@@ -234,26 +242,34 @@ export const getArusKasByDate = async (date) => {
   }
 };
 
-export const getArusKasByMonth = async (date) => {
+export const getArusKasPDF = async () => {
   try {
-    let response = await axios.get(
-      `${BASE_URL}/aruskas/search/${date}`,
-      config
-    );
-    return response.data;
+    let response = await axios({
+      url: `${BASE_URL}/laporan/aruskas`,
+      method: "GET",
+      responseType: "blob", // important
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    return error.response;
   }
 };
 
-export const getArusKasByYear = async (date) => {
+export const getArusKasPDFByDate = async (date) => {
   try {
-    let response = await axios.get(
-      `${BASE_URL}/aruskas/search/${date}`,
-      config
-    );
-    return response.data;
+    let response = await axios({
+      url: `${BASE_URL}/laporan/aruskas/${date}`,
+      method: "GET",
+      responseType: "blob", // important
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    return response;
   } catch (error) {
-    console.log(error);
+    return error.response;
   }
 };

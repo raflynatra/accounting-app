@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { color, formatDate } from "../utils/Helper";
-import { getAllNeracaSaldo, getNeracaSaldoByDate } from "../utils/Provider";
+import {
+  getAllNeracaSaldo,
+  getNeracaSaldoByDate,
+  getNeracaSaldoPDF,
+  getNeracaSaldoPDFByDate,
+} from "../utils/Provider";
 
 const styles = {
   row: {
@@ -90,6 +95,45 @@ function NeracaSaldoPage() {
     }
   };
 
+  const downloadPDF = async () => {
+    let response = "";
+    let date = new Date();
+
+    if (Object.keys(filterValue).length > 0) {
+      if (filterValue.filterPeriode === "bulanan") {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}`;
+        response = await getNeracaSaldoPDFByDate(date);
+      } else if (filterValue.filterPeriode === "tahunan") {
+        date = date.getFullYear();
+        response = await getNeracaSaldoPDFByDate(date);
+      } else {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        response = await getNeracaSaldoPDFByDate(date);
+      }
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `LAPORAN-NERACA_SALDO-ACCOUNTING-${date}.pdf`
+        );
+        document.body.appendChild(link);
+        link.click();
+      }
+    } else {
+      response = await getNeracaSaldoPDF();
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `LAPORAN-NERACA_SALDO-ACCOUNTING.pdf`);
+        document.body.appendChild(link);
+        link.click();
+      }
+    }
+  };
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -157,7 +201,11 @@ function NeracaSaldoPage() {
                 Hapus Filter
               </button>
 
-              <button className="btn btn-sm mt-2" style={styles.button}>
+              <button
+                className="btn btn-sm mt-2"
+                style={styles.button}
+                onClick={downloadPDF}
+              >
                 Cetak Laporan
               </button>
             </div>
