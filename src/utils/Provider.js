@@ -172,9 +172,9 @@ export const getAllNeracaSaldo = async () => {
   try {
     let response = await axios.get(`${BASE_URL}/neracasaldo`, config);
     return response.data;
-  } catch (error) {
-    return error.response.data;
-  }
+    } catch (error) {
+      return error.response.data;
+    }
 };
 
 export const getNeracaSaldoByDate = async (date) => {
