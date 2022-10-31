@@ -27,7 +27,15 @@ function JurnalUmumPage({ type }) {
   const navigate = useNavigate();
 
   const getJurnalList = async () => {
-    let response = await getAllJurnal();
+    const config = {
+      headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("token"),
+      },
+    };
+
+    let response = await getAllJurnal(config);
     setJurnalList(response.data);
   };
 

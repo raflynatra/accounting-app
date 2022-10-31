@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import BaseLayout from "./pages/BaseLayout";
 import DashboardPage from "./pages/DashboardPage";
@@ -16,17 +17,13 @@ import MasterUserTable from "./components/MasterUser/MasterUserTable";
 import MasterUserForm from "./components/MasterUser/MasterUserForm";
 import MasterUserEdit from "./components/MasterUser/MasterUserEdit";
 
-const Protected = ({ userRole }) => {
-  const isAuthenticated = localStorage.getItem("token");
+const Protected = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("token")
+  );
 
   return (
-    <>
-      {isAuthenticated ? (
-        <BaseLayout userRole={userRole} />
-      ) : (
-        <Navigate to="/login" replac />
-      )}
-    </>
+    <>{isAuthenticated ? <BaseLayout /> : <Navigate to="/login" replac />}</>
   );
 };
 
