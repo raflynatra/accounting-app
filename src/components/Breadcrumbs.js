@@ -49,13 +49,6 @@ function Breadcrumbs({ pathname }) {
             </li>
           ) : (
             <></>
-            // <li
-            //   className="breadcrumb-item active"
-            //   aria-current="page"
-            //   style={styles.crumbsActive}
-            // >
-            //   Dashboard
-            // </li>
           )}
           {items.map((item, index) => {
             if (item.path !== currPath) {

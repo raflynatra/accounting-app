@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BASE_URL } from "../../utils/Helper";
+import { BASE_URL, formatDateTable } from "../../utils/Helper";
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import { } from '../../utils/Provider'
 import { color } from "../../utils/Helper";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 const styles = {
   row: {
@@ -27,7 +26,7 @@ const styles = {
 export const PerkiraanTable = (props) => {
   const [perkiraan, setPerkiraan] = useState([]);
   const [perkiraanTemporary, setPerkiraanTemporary] = useState([]);
-  const [ids, setId] = useState(null)
+  const [ids, setId] = useState(null);
 
   const config = {
     headers: {
@@ -40,14 +39,11 @@ export const PerkiraanTable = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = ((id) => {
-    console.log('tes', id);
-    setId(id)
-    setShow(true)
-  })
-
-
-
+  const handleShow = (id) => {
+    console.log("tes", id);
+    setId(id);
+    setShow(true);
+  };
 
   useEffect(() => {
     getAllPerkiraan();
@@ -69,16 +65,10 @@ export const PerkiraanTable = (props) => {
 
   // DELETE
   const deletePerkiraan = async (id) => {
-    // axios.delete(`${BASE_URL}/perkiraan/delete/${id}`).then((e)=>{
-    //     console.log(e)
-    //     getAllPerkiraan();
-    // }).catch(error => {
-    //     console.log("error")
-    // })
     try {
       await axios.delete(`${BASE_URL}/perkiraan/delete/${id}`, config);
       getAllPerkiraan();
-      handleClose()
+      handleClose();
     } catch (error) {
       console.log(error);
     }
@@ -160,7 +150,7 @@ export const PerkiraanTable = (props) => {
               )
             ) : (
               <tr key={index}>
-                <td>{new Date(a.updatedAt).toLocaleString()}</td>
+                <td>{formatDateTable(a.updatedAt)}</td>
                 <td>{a.kode_perkiraan}</td>
                 <td>{a.nama_perkiraan}</td>
                 <td>{a.kelompok_akun}</td>
@@ -170,29 +160,20 @@ export const PerkiraanTable = (props) => {
                     to={`/perkiraan/edit/${a.kode_perkiraan}`}
                     className="btn btn-warning mx-2"
                   >
-                    Edit
+                    Ubah
                   </Link>
-                  <Button variant="danger" onClick={() => handleShow(a.kode_perkiraan)}>
-                    Delete
-                  </Button>
-
-                  {/* <button
-                    className="btn btn-danger mx-2"
-                    type="button"
-                    onClick={() => {
-                      deletePerkiraan(a.kode_perkiraan);
-                    }}
+                  <Button
+                    variant="danger"
+                    onClick={() => handleShow(a.kode_perkiraan)}
                   >
-                    Delete
-                  </button> */}
-
+                    Hapus
+                  </Button>
                 </td>
               </tr>
             )
           )}
         </tbody>
       </table>
-
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className="bg-warning bg-opacity-75">
@@ -209,12 +190,16 @@ export const PerkiraanTable = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Batal
           </Button>
-          <Button variant="danger" onClick={() => { deletePerkiraan(ids) }}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              deletePerkiraan(ids);
+            }}
+          >
             Iya, benar!
           </Button>
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 };

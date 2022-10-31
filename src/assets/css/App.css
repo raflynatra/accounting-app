@@ -20,7 +20,7 @@
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(even) > th {
   background-color: #c9d3f2;
-  filter: contrast(0.9);
+  filter: contrast(0.95);
 }
 
 .table-striped > tbody > tr:nth-child(odd) > td,

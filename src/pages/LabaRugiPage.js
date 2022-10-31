@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { BASE_URL } from "../utils/Helper";
 import axios from "axios";
 import { color, formatDate, formatDateTable } from "../utils/Helper";
-import { useReactToPrint } from "react-to-print";
 
 const styles = {
   row: {
@@ -43,12 +42,7 @@ const styles = {
 
 const LabaRugiPage = () => {
   const [labaRugi, setLabaRugi] = useState([]);
-  // const [labaRugiTemporary, setLabaRugiTemporary] = useState([]);
-  const [total, setTotal] = useState({
-    // totalDebet: 0,
-    // totalKredit: 0,
-    // totalSaldo: 0,
-  });
+  const [total, setTotal] = useState({});
   const [filterValue, setFilterValue] = useState({});
   const [labaRugiList, setLabaRugiList] = useState([]);
   const config = {
@@ -60,16 +54,13 @@ const LabaRugiPage = () => {
   };
 
   useEffect(() => {
-    // getAllLabaRugi();
-    getLabaRugiList()
+    getLabaRugiList();
   }, [filterValue]);
 
   const getAllLabaRugi = async () => {
-
     let response = await axios.get(`${BASE_URL}/labarugi`, config);
     return response.data;
-
-  }
+  };
 
   const getLabaRugiByDate = async (date) => {
     try {
@@ -122,12 +113,9 @@ const LabaRugiPage = () => {
     setFilterValue((values) => ({ ...values, [name]: value }));
   };
 
-
   const clearFilter = () => {
     setFilterValue({});
   };
-
-
 
   const getLabaRugiList = async () => {
     let response = "";
@@ -180,7 +168,6 @@ const LabaRugiPage = () => {
     }
   };
 
-
   const downloadPDF = async () => {
     let response = "";
     let date = new Date();
@@ -220,17 +207,11 @@ const LabaRugiPage = () => {
     }
   };
 
-
-
-
-
   return (
     <div className="container">
-
-
       <div className="row">
         <div className="col">
-        <div className="row" style={styles.row}>
+          <div className="row" style={styles.row}>
             <div>
               <h5 style={styles.floatText}>Filter</h5>
             </div>
@@ -300,27 +281,23 @@ const LabaRugiPage = () => {
             </div>
             <div className="col ">
               <h6>Total Kredit</h6>
-              <h5>{`Rp ${parseInt(total.totalKredit).toLocaleString("id")}`}</h5>
+              <h5>{`Rp ${parseInt(total.totalKredit).toLocaleString(
+                "id"
+              )}`}</h5>
             </div>
             <div className="col ">
               <h6>Total Saldo</h6>
-              <h5>{`Rp ${parseFloat(total.totalSaldo).toLocaleString("id")}`}</h5>
+              <h5>{`Rp ${parseFloat(total.totalSaldo).toLocaleString(
+                "id"
+              )}`}</h5>
             </div>
           </div>
         </div>
       </div>
 
-
-
-
-
-
-
       {/* Isi Table DONE */}
       <div>
-        <table className="table table-striped"
-        // ref={componentRef}
-        >
+        <table className="table table-striped">
           <thead>
             <tr>
               <th scope="col">Tanggal</th>
@@ -329,7 +306,6 @@ const LabaRugiPage = () => {
               <th scope="col">Debet</th>
               <th scope="col">Kredit</th>
               <th scope="col">Saldo</th>
-
             </tr>
           </thead>
           <tbody>
@@ -341,9 +317,7 @@ const LabaRugiPage = () => {
                   <td>{a._id.kodePerkiraan}</td>
                   <td>Rp. {a.debet.toLocaleString()}</td>
                   <td>Rp. {a.kredit.toLocaleString()}</td>
-                  <td>Rp. {(a.debet - a.kredit).toLocaleString(
-                    "id"
-                  )}</td>
+                  <td>Rp. {(a.debet - a.kredit).toLocaleString("id")}</td>
                 </tr>
               ))
             ) : (
@@ -365,4 +339,3 @@ const LabaRugiPage = () => {
 };
 
 export default LabaRugiPage;
-

@@ -18,7 +18,7 @@ const styles = {
     backgroundColor: color.white,
   },
   content: {
-    height: "581px",
+    height: "578px",
     backgroundColor: color.tierary,
     overflowY: "auto",
   },

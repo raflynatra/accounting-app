@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DeleteModal from "../DeleteModal";
-import { color } from "../../utils/Helper";
+import { color, formatDate, formatDateTable } from "../../utils/Helper";
 
 function JurnalUmumTable({
   jurnalList,
@@ -67,7 +67,7 @@ function JurnalUmumTable({
                 type === "dashboard" ? (
                   index < 5 ? (
                     <tr key={index}>
-                      <td>{new Date(jurnal.tanggalJurnal).toLocaleString()}</td>
+                      <td>{formatDateTable(jurnal.tanggalJurnal)}</td>
                       <td>{jurnal.uraian}</td>
                       <td>{jurnal.nomerBukti}</td>
                       <td>{jurnal.namaPerkiraanJurnal}</td>
@@ -79,7 +79,7 @@ function JurnalUmumTable({
                   )
                 ) : (
                   <tr key={index}>
-                    <td>{new Date(jurnal.tanggalJurnal).toLocaleString()}</td>
+                    <td>{formatDateTable(jurnal.tanggalJurnal)}</td>
                     <td>{jurnal.uraian}</td>
                     <td>{jurnal.nomerBukti}</td>
                     <td>{jurnal.namaPerkiraanJurnal}</td>
