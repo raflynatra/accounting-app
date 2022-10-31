@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BASE_URL } from "../utils/Helper";
 import axios from "axios";
-import { color } from "../utils/Helper";
+import { color, formatDate, formatDateTable } from "../utils/Helper";
 import { useReactToPrint } from "react-to-print";
 
 const styles = {
@@ -43,91 +43,284 @@ const styles = {
 
 const LabaRugiPage = () => {
   const [labaRugi, setLabaRugi] = useState([]);
-  const [labaRugiTemporary, setLabaRugiTemporary] = useState([]);
-  const [total, setTotal] = useState("");
+  // const [labaRugiTemporary, setLabaRugiTemporary] = useState([]);
+  const [total, setTotal] = useState({
+    // totalDebet: 0,
+    // totalKredit: 0,
+    // totalSaldo: 0,
+  });
+  const [filterValue, setFilterValue] = useState({});
+  const [labaRugiList, setLabaRugiList] = useState([]);
   const config = {
     headers: {
-        "Access-Control-Allow-Origin": true,
-        "Content-Type": "application/json",
-        authorization: localStorage.getItem("token"),
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
     },
-};
+  };
+
   useEffect(() => {
-    getAllLabaRugi();
-  }, []);
+    // getAllLabaRugi();
+    getLabaRugiList()
+  }, [filterValue]);
 
   const getAllLabaRugi = async () => {
+
     let response = await axios.get(`${BASE_URL}/labarugi`, config);
-    // let dataTotal = {
-    //     totalDebet: response.data.totalDebet,
-    //     totalKredit: response.data.totalKredit,
-    //     saldo: response.data.saldo
-    // }
-    setLabaRugi(response.data.data);
-    setTotal({
-      totalDebet: response.data.totalDebet,
-      totalKredit: response.data.totalKredit,
-      totalSaldo: response.data.totalSaldo,
-    });
-    // console.log(response.data)
-    setLabaRugiTemporary(response.data.data);
+    return response.data;
+
+  }
+
+  const getLabaRugiByDate = async (date) => {
+    try {
+      let response = await axios.get(
+        `${BASE_URL}/labarugi/search/${date}`,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
   };
 
-  // SEARCH
-  const handleSearch = (e) => {
-    console.log(e.target.value);
-    let labaRugiSearch = labaRugi.filter((a) =>
-      a._id.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setLabaRugiTemporary(labaRugiSearch);
-    console.log(labaRugi);
+  const getLabaRugiPDF = async () => {
+    try {
+      let response = await axios({
+        url: `${BASE_URL}/laporan/LabaRugi/`,
+        method: "GET",
+        responseType: "blob", // important
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      return response;
+    } catch (error) {
+      return error.response;
+    }
   };
 
-  // PRINT
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
+  const getLabaRugiPDFByDate = async (date) => {
+    try {
+      let response = await axios({
+        url: `${BASE_URL}/laporan/labarugi/${date}`,
+        method: "GET",
+        responseType: "blob", // important
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setFilterValue((values) => ({ ...values, [name]: value }));
+  };
+
+
+  const clearFilter = () => {
+    setFilterValue({});
+  };
+
+
+
+  const getLabaRugiList = async () => {
+    let response = "";
+    let date = new Date();
+
+    if (Object.keys(filterValue).length > 0) {
+      if (filterValue.filterPeriode === "bulanan") {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}`;
+        response = await getLabaRugiByDate(date);
+      } else if (filterValue.filterPeriode === "tahunan") {
+        date = date.getFullYear();
+        response = await getLabaRugiByDate(date);
+      } else {
+        date = filterValue.filterPeriode;
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        response = await getLabaRugiByDate(date);
+      }
+      if (response.code === 200) {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+          totalSaldo: response.totalSaldo,
+        });
+        setLabaRugiList(response.data);
+      } else {
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+          totalSaldo: 0,
+        });
+        setLabaRugiList({});
+      }
+    } else {
+      response = await getAllLabaRugi();
+      if (response.code === 200) {
+        setTotal({
+          totalDebet: response.totalDebet,
+          totalKredit: response.totalKredit,
+          totalSaldo: response.totalSaldo,
+        });
+        setLabaRugiList(response.data);
+      } else {
+        setTotal({
+          totalDebet: 0,
+          totalKredit: 0,
+          totalSaldo: 0,
+        });
+        setLabaRugiList({});
+      }
+    }
+  };
+
+
+  const downloadPDF = async () => {
+    let response = "";
+    let date = new Date();
+
+    if (Object.keys(filterValue).length > 0) {
+      if (filterValue.filterPeriode === "bulanan") {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}`;
+        response = await getLabaRugiPDFByDate(date);
+      } else if (filterValue.filterPeriode === "tahunan") {
+        date = date.getFullYear();
+        response = await getLabaRugiPDFByDate(date);
+      } else {
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        response = await getLabaRugiPDFByDate(date);
+      }
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `LAPORAN-LABA_RUGI-ACCOUNTING-${date}.pdf`
+        );
+        document.body.appendChild(link);
+        link.click();
+      }
+    } else {
+      response = await getLabaRugiPDF();
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `LAPORAN-LABA_RUGI-ACCOUNTING.pdf`);
+        document.body.appendChild(link);
+        link.click();
+      }
+    }
+  };
+
+
+
+
 
   return (
     <div className="container">
-      <div style={styles.row1}>
-        <div className="row pt-2" style={styles.row}>
-          <div>
-            <h4 style={styles.floatText}>Laporan Laba Rugi</h4>
-          </div>
-          <div className="col">
-            <h6>Total Debit</h6>
-            <h5>{`Rp ${parseInt(total.totalDebet).toLocaleString("id")}`}</h5>
-          </div>
-          <div className="col">
-            <h6>Total Kredit</h6>
-            <h5>{`Rp ${parseInt(total.totalKredit).toLocaleString("id")}`}</h5>
-          </div>
-          <div className="col">
-            <h6>Total Saldo</h6>
-            <h5>{`Rp ${parseInt(total.totalSaldo).toLocaleString("id")}`}</h5>
+
+
+      <div className="row">
+        <div className="col">
+        <div className="row" style={styles.row}>
+            <div>
+              <h5 style={styles.floatText}>Filter</h5>
+            </div>
+            <div className="col">
+              <label>Periode</label>
+              <input
+                type="date"
+                className="form-control form-control-sm"
+                name="filterPeriode"
+                value={formatDate(new Date())}
+                onChange={handleChange}
+              />
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="filterPeriode"
+                  value="bulanan"
+                  id="filterMonth"
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="filterMonth">
+                  Bulanan
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="filterPeriode"
+                  value="tahunan"
+                  id="filterYear"
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="filterYear">
+                  Tahunan
+                </label>
+              </div>
+            </div>
+            <div className="col d-grid gap-1">
+              <button
+                className="btn btn-sm btn-warning mt-3"
+                onClick={clearFilter}
+              >
+                Hapus Filter
+              </button>
+
+              <button
+                className="btn btn-sm mt-2"
+                style={styles.button}
+                onClick={downloadPDF}
+              >
+                Cetak Laporan
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="row pt-2">
-          <input
-            type="text"
-            placeholder="Cari Laba Rugi"
-            className="form-control mb-2"
-            onChange={(e) => handleSearch(e)}
-          />
-          <button
-            className="btn btn-sm mt-2 col"
-            onClick={handlePrint}
-            style={styles.button}
-          >
-            Cetak
-          </button>
+        <div className="col ">
+          <div className="row pt-4" style={styles.row}>
+            <div className=" ">
+              <h5 style={styles.floatText}>Laporan Laba Rugi</h5>
+            </div>
+            <div className="col ">
+              <h6>Total Debit</h6>
+              <h5>{`Rp ${parseInt(total.totalDebet).toLocaleString("id")}`}</h5>
+            </div>
+            <div className="col ">
+              <h6>Total Kredit</h6>
+              <h5>{`Rp ${parseInt(total.totalKredit).toLocaleString("id")}`}</h5>
+            </div>
+            <div className="col ">
+              <h6>Total Saldo</h6>
+              <h5>{`Rp ${parseFloat(total.totalSaldo).toLocaleString("id")}`}</h5>
+            </div>
+          </div>
         </div>
       </div>
+
+
+
+
+
+
+
+      {/* Isi Table DONE */}
       <div>
-        <table className="table table-striped" ref={componentRef}>
+        <table className="table table-striped"
+        // ref={componentRef}
+        >
           <thead>
             <tr>
               <th scope="col">Tanggal</th>
@@ -135,27 +328,41 @@ const LabaRugiPage = () => {
               <th scope="col">Kode Perkiraan</th>
               <th scope="col">Debet</th>
               <th scope="col">Kredit</th>
+              <th scope="col">Saldo</th>
+
             </tr>
           </thead>
           <tbody>
-            {labaRugiTemporary.map((a, index) => (
-              <tr key={index}>
-                <td>{new Date(a._id.tanggalJurnal).toLocaleString()}</td>
-                <td>{a._id.namaPerkiraan}</td>
-                <td>{a._id.kodePerkiraan}</td>
-                <td>Rp. {a.debet}</td>
-                <td>Rp. {a.kredit}</td>
+            {labaRugiList.length > 0 ? (
+              labaRugiList.map((a, index) => (
+                <tr key={index}>
+                  <td>{formatDateTable(a._id.tanggalJurnal)}</td>
+                  <td>{a._id.namaPerkiraan}</td>
+                  <td>{a._id.kodePerkiraan}</td>
+                  <td>Rp. {a.debet.toLocaleString()}</td>
+                  <td>Rp. {a.kredit.toLocaleString()}</td>
+                  <td>Rp. {(a.debet - a.kredit).toLocaleString(
+                    "id"
+                  )}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center"
+                  style={{ border: 0, backgroundColor: color.tierary }}
+                >
+                  Data tidak tersedia
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
-
-        {/* <div>
-                    <TotalLabaRugi />
-                </div> */}
       </div>
     </div>
   );
 };
 
 export default LabaRugiPage;
+
