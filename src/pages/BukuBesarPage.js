@@ -53,6 +53,13 @@ function BukuBesarPage() {
   const navigate = useNavigate();
 
   const getJurnalList = async () => {
+    const config = {
+      headers: {
+        "Access-Control-Allow-Origin": true,
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("token"),
+      },
+    };
     let response = "";
     let date = new Date();
 
@@ -97,7 +104,7 @@ function BukuBesarPage() {
         setJurnalList(response.data);
       }
     } else {
-      response = await getAllJurnal();
+      response = await getAllJurnal(config);
       if (response.code !== 200) {
         setJurnalList({});
         setTotal({
