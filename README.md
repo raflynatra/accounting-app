@@ -11,10 +11,10 @@ This project is a Frontend App and developed as a Final Project Assignment to co
 
 ## How to Start
 
-Clone this repository using\
+Fork this repository and clone the repo using\
 `git clone <repo_url>.git`
 
-Then in the folder repository, run :\
+Then in the folder repository, run :
 
 ```
 npm install
