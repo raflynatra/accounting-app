@@ -90,10 +90,10 @@ function LoginPage() {
                 </span>
               </div>
               <p
-                className="h5"
-                style={{ color: color.primary, marginTop: "10px" }}
+                className="h6"
+                style={{ color: color.primary, marginTop: "5px" }}
               >
-                Eliminates your accounting problem!
+                Make bookkeeping easy for your business!
               </p>
             </div>
             <form className="mt-4" onSubmit={handleSubmit}>

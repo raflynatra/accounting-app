@@ -18,7 +18,7 @@ function Footer() {
             alt="Logo"
             style={{ width: "30px", margin: "0px 5px" }}
           />
-          <span>Accounting</span>
+          <p className="h6">AccountJuco</p>
         </div>
         <div>
           <span>&copy; 2022 AccountingJuaraCoding. All rights reserved.</span>
