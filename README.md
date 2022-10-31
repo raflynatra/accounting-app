@@ -11,11 +11,15 @@ This project is a Frontend App and developed as a Final Project Assignment to co
 
 ## How to Start
 
-Clone this repository using
+Clone this repository using\
 `git clone <repo_url>.git`
 
-Then in your repository, run :
-` npm install npm start`
+Then in the folder repository, run :\
+
+```
+npm install
+npm start
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
