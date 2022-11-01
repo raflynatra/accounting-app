@@ -45,6 +45,14 @@ function ArusKasPage() {
   });
   const [filterValue, setFilterValue] = useState({});
 
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
+
   const getArusKasList = async () => {
     let response = "";
     let date = new Date();
@@ -52,15 +60,15 @@ function ArusKasPage() {
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        response = await getArusKasByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
-        response = await getArusKasByDate(date);
       } else {
         date = new Date(filterValue.filterPeriode);
         date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
-        response = await getArusKasByDate(date);
       }
+
+      response = await getArusKasByDate(date, config);
+
       if (response.code === 200) {
         setTotal({
           totalDebet: response.totalDebet,
@@ -77,7 +85,7 @@ function ArusKasPage() {
         setArusKasList({});
       }
     } else {
-      response = await getAllArusKas();
+      response = await getAllArusKas(config);
       if (response.code === 200) {
         setTotal({
           totalDebet: response.totalDebet,

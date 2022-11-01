@@ -5,7 +5,7 @@ import {
   getAllPerkiraan,
   updateJurnal,
 } from "../../utils/Provider";
-import { formatDate, validateInput } from "../../utils/Helper";
+import { formatDate } from "../../utils/Helper";
 
 function JurnalUmumForm({ isEdit }) {
   const [jurnal, setJurnal] = useState({});
@@ -13,8 +13,16 @@ function JurnalUmumForm({ isEdit }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
+
   const getPerkiraanList = async () => {
-    let response = await getAllPerkiraan();
+    let response = await getAllPerkiraan(config);
     setPerkiraanList(response.data);
   };
 
@@ -48,9 +56,9 @@ function JurnalUmumForm({ isEdit }) {
     };
 
     if (isEdit) {
-      let response = await updateJurnal(payload);
+      let response = await updateJurnal(payload, config);
     } else {
-      let response = await createJurnal(payload);
+      let response = await createJurnal(payload, config);
     }
 
     navigate("/jurnal-umum");

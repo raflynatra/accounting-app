@@ -1,15 +1,7 @@
 import { BASE_URL } from "./Helper";
 import axios from "axios";
 
-const config = {
-  headers: {
-    "Access-Control-Allow-Origin": true,
-    "Content-Type": "application/json",
-    authorization: localStorage.getItem("token"),
-  },
-};
-
-export const getAllPerkiraan = async () => {
+export const getAllPerkiraan = async (config) => {
   try {
     let response = await axios.get(`${BASE_URL}/perkiraan`, config);
     return response.data;
@@ -18,7 +10,7 @@ export const getAllPerkiraan = async () => {
   }
 };
 
-export const getPerkiraanById = async (id) => {
+export const getPerkiraanById = async (id, config) => {
   try {
     let response = await axios.get(`${BASE_URL}/perkiraan/${id}`);
     return response.data;
@@ -27,7 +19,7 @@ export const getPerkiraanById = async (id) => {
   }
 };
 
-export const createPerkiraan = async (data) => {
+export const createPerkiraan = async (data, config) => {
   try {
     let response = await axios.post(`${BASE_URL}/perkiraan`, data);
     return response.data;
@@ -36,7 +28,7 @@ export const createPerkiraan = async (data) => {
   }
 };
 
-export const updatePerkiraan = async (id) => {
+export const updatePerkiraan = async (id, config) => {
   try {
     let response = await axios.put(`${BASE_URL}/perkiraan/${id}`);
     return response.data;
@@ -63,7 +55,7 @@ export const getAllJurnal = async (config) => {
   }
 };
 
-export const getJurnalByKodePerkiraan = async (kodePerkiraan) => {
+export const getJurnalByKodePerkiraan = async (kodePerkiraan, config) => {
   try {
     let response = await axios.get(
       `${BASE_URL}/jurnal/${kodePerkiraan}`,
@@ -75,7 +67,7 @@ export const getJurnalByKodePerkiraan = async (kodePerkiraan) => {
   }
 };
 
-export const getJurnalByDate = async (date) => {
+export const getJurnalByDate = async (date, config) => {
   try {
     let response = await axios.get(`${BASE_URL}/jurnal/search/${date}`, config);
     return response.data;
@@ -132,7 +124,7 @@ export const getJurnalPDFByDate = async (date) => {
   }
 };
 
-export const createJurnal = async (data) => {
+export const createJurnal = async (data, config) => {
   try {
     let response = await axios.post(`${BASE_URL}/jurnal`, data, config);
     return response.data;
@@ -141,7 +133,7 @@ export const createJurnal = async (data) => {
   }
 };
 
-export const updateJurnal = async (payload) => {
+export const updateJurnal = async (payload, config) => {
   let { _id } = payload;
 
   try {
@@ -156,7 +148,7 @@ export const updateJurnal = async (payload) => {
   }
 };
 
-export const deleteJurnal = async (id) => {
+export const deleteJurnal = async (id, config) => {
   try {
     let response = await axios.delete(
       `${BASE_URL}/jurnal/delete/${id}`,
@@ -168,7 +160,7 @@ export const deleteJurnal = async (id) => {
   }
 };
 
-export const getAllNeracaSaldo = async () => {
+export const getAllNeracaSaldo = async (config) => {
   try {
     let response = await axios.get(`${BASE_URL}/neracasaldo`, config);
     return response.data;
@@ -177,7 +169,7 @@ export const getAllNeracaSaldo = async () => {
   }
 };
 
-export const getNeracaSaldoByDate = async (date) => {
+export const getNeracaSaldoByDate = async (date, config) => {
   try {
     let response = await axios.get(
       `${BASE_URL}/neracasaldo/search/${date}`,
@@ -221,7 +213,7 @@ export const getNeracaSaldoPDFByDate = async (date) => {
   }
 };
 
-export const getAllArusKas = async () => {
+export const getAllArusKas = async (config) => {
   try {
     let response = await axios.get(`${BASE_URL}/aruskas`, config);
     return response.data;
@@ -230,7 +222,7 @@ export const getAllArusKas = async () => {
   }
 };
 
-export const getArusKasByDate = async (date) => {
+export const getArusKasByDate = async (date, config) => {
   try {
     let response = await axios.get(
       `${BASE_URL}/aruskas/search/${date}`,

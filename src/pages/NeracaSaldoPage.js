@@ -45,6 +45,14 @@ function NeracaSaldoPage() {
   });
   const [filterValue, setFilterValue] = useState({});
 
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
+
   const getNeracaSaldoList = async () => {
     let response = "";
     let date = new Date();
@@ -52,14 +60,14 @@ function NeracaSaldoPage() {
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        response = await getNeracaSaldoByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
-        response = await getNeracaSaldoByDate(date);
       } else {
         date = filterValue.filterPeriode;
-        response = await getNeracaSaldoByDate(date);
       }
+
+      response = await getNeracaSaldoByDate(date, config);
+
       if (response.code === 200) {
         setTotal({
           totalDebet: response.totalDebet,
@@ -76,7 +84,7 @@ function NeracaSaldoPage() {
         setNeracaSaldoList({});
       }
     } else {
-      response = await getAllNeracaSaldo();
+      response = await getAllNeracaSaldo(config);
       if (response.code === 200) {
         setTotal({
           totalDebet: response.totalDebet,

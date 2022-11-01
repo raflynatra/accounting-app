@@ -40,7 +40,6 @@ export const PerkiraanTable = (props) => {
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
-    console.log("tes", id);
     setId(id);
     setShow(true);
   };
