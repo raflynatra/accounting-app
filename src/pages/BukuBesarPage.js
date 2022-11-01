@@ -70,7 +70,7 @@ function BukuBesarPage() {
         date = date.getFullYear();
       } else {
         date = new Date(filterValue.filterPeriode);
-        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
       }
 
       response = await getJurnalByDate(date, config);
@@ -238,7 +238,11 @@ function BukuBesarPage() {
                 type="date"
                 className="form-control form-control-sm"
                 name="filterPeriode"
-                value={formatDate(new Date())}
+                value={
+                  filterValue.filterPeriode
+                    ? formatDate(filterValue.filterPeriode)
+                    : formatDate(new Date())
+                }
                 onChange={handleChange}
               />
               <div className="form-check">

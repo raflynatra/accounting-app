@@ -35,7 +35,7 @@ function JurnalUmumForm({ isEdit }) {
     const name = e.target.name;
     let value = e.target.value;
 
-    if (name === "nomerBukti" || name === "debet" || name === "kredit") {
+    if (name === "debet" || name === "kredit") {
       const re = /^[0-9\b]+$/;
       if (value === "" || re.test(value)) {
         setJurnal((values) => ({ ...values, [name]: value }));
@@ -49,11 +49,18 @@ function JurnalUmumForm({ isEdit }) {
     e.preventDefault();
     const { debet, kredit, ...data } = jurnal;
 
-    const payload = {
+    let payload = {
       ...data,
       debet: parseInt(debet),
       kredit: parseInt(kredit),
     };
+
+    if (jurnal.tanggalJurnal === undefined) {
+      payload = {
+        ...payload,
+        tanggalJurnal: formatDate(new Date()),
+      };
+    }
 
     if (isEdit) {
       let response = await updateJurnal(payload, config);
@@ -73,7 +80,11 @@ function JurnalUmumForm({ isEdit }) {
             type="date"
             className="form-control"
             name="tanggalJurnal"
-            value={formatDate(jurnal.tanggalJurnal) || ""}
+            value={
+              jurnal.tanggalJurnal
+                ? formatDate(jurnal.tanggalJurnal)
+                : formatDate(new Date())
+            }
             onChange={handleChange}
             required
           />

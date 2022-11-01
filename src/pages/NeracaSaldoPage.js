@@ -63,7 +63,8 @@ function NeracaSaldoPage() {
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
       } else {
-        date = filterValue.filterPeriode;
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
       }
 
       response = await getNeracaSaldoByDate(date, config);
@@ -171,7 +172,11 @@ function NeracaSaldoPage() {
                 type="date"
                 className="form-control form-control-sm"
                 name="filterPeriode"
-                value={formatDate(new Date())}
+                value={
+                  filterValue.filterPeriode
+                    ? formatDate(filterValue.filterPeriode)
+                    : formatDate(new Date())
+                }
                 onChange={handleChange}
               />
               <div className="form-check">

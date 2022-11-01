@@ -129,8 +129,8 @@ const LabaRugiPage = () => {
         date = date.getFullYear();
         response = await getLabaRugiByDate(date);
       } else {
-        date = filterValue.filterPeriode;
-        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
         response = await getLabaRugiByDate(date);
       }
       if (response.code === 200) {
@@ -221,7 +221,11 @@ const LabaRugiPage = () => {
                 type="date"
                 className="form-control form-control-sm"
                 name="filterPeriode"
-                value={formatDate(new Date())}
+                value={
+                  filterValue.filterPeriode
+                    ? formatDate(filterValue.filterPeriode)
+                    : formatDate(new Date())
+                }
                 onChange={handleChange}
               />
               <div className="form-check">
