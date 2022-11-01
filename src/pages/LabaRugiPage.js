@@ -12,7 +12,7 @@ const styles = {
     margin: "10px 0",
     border: `1px solid #8da9fc`,
     borderRadius: "10px",
-    minHeight: "102px",
+    minHeight: "140px",
     position: "relative",
   },
   row1: {
@@ -130,14 +130,12 @@ const LabaRugiPage = () => {
         date = date.getFullYear();
         response = await getLabaRugiByDate(date);
       } else {
-
         console.log("c");
         date = filterValue.filterPeriode;
         console.log("z", date);
         let dataCoba = date.split("-")
         date = `${dataCoba[0]}/${dataCoba[1]}/${dataCoba[2]}`;
         console.log(dataCoba);
-
         response = await getLabaRugiByDate(date);
       }
       if (response.code === 200) {
@@ -230,7 +228,11 @@ const LabaRugiPage = () => {
                 type="date"
                 className="form-control form-control-sm"
                 name="filterPeriode"
-                value={formatDate(new Date())}
+                value={
+                  filterValue.filterPeriode
+                    ? formatDate(filterValue.filterPeriode)
+                    : formatDate(new Date())
+                }
                 onChange={handleChange}
               />
               <div className="form-check">
@@ -286,17 +288,15 @@ const LabaRugiPage = () => {
             </div>
             <div className="col ">
               <h6>Total Debit</h6>
-              <h5>{`Rp ${parseInt(total.totalDebet).toLocaleString("id")}`}</h5>
+              <h5>{`Rp${parseInt(total.totalDebet).toLocaleString("id")}`}</h5>
             </div>
             <div className="col ">
               <h6>Total Kredit</h6>
-              <h5>{`Rp ${parseInt(total.totalKredit).toLocaleString(
-                "id"
-              )}`}</h5>
+              <h5>{`Rp${parseInt(total.totalKredit).toLocaleString("id")}`}</h5>
             </div>
             <div className="col ">
               <h6>Total Saldo</h6>
-              <h5>{`Rp ${parseFloat(total.totalSaldo).toLocaleString(
+              <h5>{`Rp${parseFloat(total.totalSaldo).toLocaleString(
                 "id"
               )}`}</h5>
             </div>
@@ -324,9 +324,9 @@ const LabaRugiPage = () => {
                   <td>{formatDateTable(a._id.tanggalJurnal)}</td>
                   <td>{a._id.namaPerkiraan}</td>
                   <td>{a._id.kodePerkiraan}</td>
-                  <td>Rp. {a.debet.toLocaleString()}</td>
-                  <td>Rp. {a.kredit.toLocaleString()}</td>
-                  <td>Rp. {(a.debet - a.kredit).toLocaleString("id")}</td>
+                  <td>Rp{a.debet.toLocaleString("id")}</td>
+                  <td>Rp{a.kredit.toLocaleString("id")}</td>
+                  <td>Rp{(a.debet - a.kredit).toLocaleString("id")}</td>
                 </tr>
               ))
             ) : (

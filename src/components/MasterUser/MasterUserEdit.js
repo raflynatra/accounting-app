@@ -17,12 +17,9 @@ const MasterUserEdit = () => {
   const getUserById = async () => {
     let dataDummy = [];
     const response = await axios.get(`${BASE_URL}/user/`);
-    console.log("aaaa", response.data.data);
     dataDummy = response.data.data;
     let user = dataDummy.find((e) => e._id == id);
 
-    console.log("user", user);
-    console.log("asa", dataDummy, id);
     setUsername(user.username);
     setEmail(user.email);
     setRole(user.role);

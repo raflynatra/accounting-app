@@ -25,16 +25,15 @@ function JurnalUmumPage({ type }) {
   const [jurnalList, setJurnalList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
 
   const getJurnalList = async () => {
-    const config = {
-      headers: {
-        "Access-Control-Allow-Origin": true,
-        "Content-Type": "application/json",
-        authorization: localStorage.getItem("token"),
-      },
-    };
-
     let response = await getAllJurnal(config);
     setJurnalList(response.data);
   };
@@ -44,7 +43,7 @@ function JurnalUmumPage({ type }) {
   }, []);
 
   const handleDelete = async (id) => {
-    await deleteJurnal(id);
+    await deleteJurnal(id, config);
     setJurnalList(jurnalList.filter((item) => item._id !== id));
   };
 

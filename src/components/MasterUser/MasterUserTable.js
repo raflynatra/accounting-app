@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BASE_URL } from "../../utils/Helper";
+import { BASE_URL, formatDateTable } from "../../utils/Helper";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { color } from "../../utils/Helper";
@@ -32,7 +32,6 @@ const MasterUserTable = (props) => {
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
-    console.log("tes", id);
     setModal(id);
     setShow(true);
   };
@@ -43,7 +42,6 @@ const MasterUserTable = (props) => {
 
   const getAllUser = async () => {
     let response = await axios.get(`${BASE_URL}/user`);
-    console.log(response.data);
     setUser(response.data.data);
   };
 
@@ -86,8 +84,8 @@ const MasterUserTable = (props) => {
         <tbody>
           {user.map((a, index) => (
             <tr key={index}>
-              <td>{new Date(a.createdAt).toLocaleString()}</td>
-              <td>{new Date(a.updatedAt).toLocaleString()}</td>
+              <td>{formatDateTable(a.createdAt)}</td>
+              <td>{formatDateTable(a.updatedAt)}</td>
               <td>{a.username}</td>
               <td>{a.email}</td>
               <td>{a.role}</td>

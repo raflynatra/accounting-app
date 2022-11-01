@@ -45,6 +45,14 @@ function NeracaSaldoPage() {
   });
   const [filterValue, setFilterValue] = useState({});
 
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
+
   const getNeracaSaldoList = async () => {
     let response = "";
     let date = new Date();
@@ -52,14 +60,15 @@ function NeracaSaldoPage() {
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        response = await getNeracaSaldoByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
-        response = await getNeracaSaldoByDate(date);
       } else {
-        date = filterValue.filterPeriode;
-        response = await getNeracaSaldoByDate(date);
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
       }
+
+      response = await getNeracaSaldoByDate(date, config);
+
       if (response.code === 200) {
         setTotal({
           totalDebet: response.totalDebet,
@@ -76,7 +85,7 @@ function NeracaSaldoPage() {
         setNeracaSaldoList({});
       }
     } else {
-      response = await getAllNeracaSaldo();
+      response = await getAllNeracaSaldo(config);
       if (response.code === 200) {
         setTotal({
           totalDebet: response.totalDebet,
@@ -163,7 +172,11 @@ function NeracaSaldoPage() {
                 type="date"
                 className="form-control form-control-sm"
                 name="filterPeriode"
-                value={formatDate(new Date())}
+                value={
+                  filterValue.filterPeriode
+                    ? formatDate(filterValue.filterPeriode)
+                    : formatDate(new Date())
+                }
                 onChange={handleChange}
               />
               <div className="form-check">
@@ -248,8 +261,8 @@ function NeracaSaldoPage() {
                 <tr key={index}>
                   <td>{neraca._id.kodePerkiraan}</td>
                   <td>{neraca._id.namaPerkiraan}</td>
-                  <td>{`Rp${neraca.Debet.toLocaleString()}`}</td>
-                  <td>{`Rp${neraca.Kredit.toLocaleString()}`}</td>
+                  <td>{`Rp${neraca.Debet.toLocaleString("id")}`}</td>
+                  <td>{`Rp${neraca.Kredit.toLocaleString("id")}`}</td>
                   <td>{`Rp${(neraca.Debet - neraca.Kredit).toLocaleString(
                     "id"
                   )}`}</td>

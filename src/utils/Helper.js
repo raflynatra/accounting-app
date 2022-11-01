@@ -11,15 +11,28 @@ export const color = {
 export const formatDate = (date) => {
   if (date !== "" || date !== undefined) {
     date = new Date(date);
+
     let dayOfMonth = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
 
-    return `${year}-${month}-${dayOfMonth}`;
+    if (dayOfMonth < 10) {
+      return `${year}-${month}-0${dayOfMonth}`;
+    } else {
+      return `${year}-${month}-${dayOfMonth}`;
+    }
   } else {
-    console.log(date);
     date = new Date();
-    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
+    let dayOfMonth = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if (dayOfMonth < 10) {
+      return `${year}-${month}-0${dayOfMonth}`;
+    } else {
+      return `${year}-${month}-${dayOfMonth}`;
+    }
   }
 };
 

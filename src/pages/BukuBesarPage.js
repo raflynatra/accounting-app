@@ -51,30 +51,30 @@ function BukuBesarPage() {
   const [filterValue, setFilterValue] = useState({});
   const [searchPerkiraan, setSearchPerkiraan] = useState("");
   const navigate = useNavigate();
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
 
   const getJurnalList = async () => {
-    const config = {
-      headers: {
-        "Access-Control-Allow-Origin": true,
-        "Content-Type": "application/json",
-        authorization: localStorage.getItem("token"),
-      },
-    };
     let response = "";
     let date = new Date();
 
     if (Object.keys(filterValue).length > 0) {
       if (filterValue.filterPeriode === "bulanan") {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
-        response = await getJurnalByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
         date = date.getFullYear();
-        response = await getJurnalByDate(date);
       } else {
         date = new Date(filterValue.filterPeriode);
-        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
-        response = await getJurnalByDate(date);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
       }
+
+      response = await getJurnalByDate(date, config);
+
       if (response.code !== 200) {
         setJurnalList({});
         setTotal({
@@ -89,7 +89,7 @@ function BukuBesarPage() {
         setJurnalList(response.data);
       }
     } else if (searchPerkiraan.length > 0) {
-      response = await getJurnalByKodePerkiraan(searchPerkiraan);
+      response = await getJurnalByKodePerkiraan(searchPerkiraan, config);
       if (response.code !== 200) {
         setJurnalList({});
         setTotal({
@@ -122,7 +122,7 @@ function BukuBesarPage() {
   };
 
   const getPerkiraanList = async () => {
-    let response = await getAllPerkiraan();
+    let response = await getAllPerkiraan(config);
     setPerkiraanList(response.data);
   };
 
@@ -238,7 +238,11 @@ function BukuBesarPage() {
                 type="date"
                 className="form-control form-control-sm"
                 name="filterPeriode"
-                value={formatDate(new Date())}
+                value={
+                  filterValue.filterPeriode
+                    ? formatDate(filterValue.filterPeriode)
+                    : formatDate(new Date())
+                }
                 onChange={handleChange}
               />
               <div className="form-check">

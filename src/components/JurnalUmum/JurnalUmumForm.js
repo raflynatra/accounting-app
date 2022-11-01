@@ -5,7 +5,7 @@ import {
   getAllPerkiraan,
   updateJurnal,
 } from "../../utils/Provider";
-import { formatDate, validateInput } from "../../utils/Helper";
+import { formatDate } from "../../utils/Helper";
 
 function JurnalUmumForm({ isEdit }) {
   const [jurnal, setJurnal] = useState({});
@@ -13,8 +13,16 @@ function JurnalUmumForm({ isEdit }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
+
   const getPerkiraanList = async () => {
-    let response = await getAllPerkiraan();
+    let response = await getAllPerkiraan(config);
     setPerkiraanList(response.data);
   };
 
@@ -27,7 +35,7 @@ function JurnalUmumForm({ isEdit }) {
     const name = e.target.name;
     let value = e.target.value;
 
-    if (name === "nomerBukti" || name === "debet" || name === "kredit") {
+    if (name === "debet" || name === "kredit") {
       const re = /^[0-9\b]+$/;
       if (value === "" || re.test(value)) {
         setJurnal((values) => ({ ...values, [name]: value }));
@@ -41,16 +49,23 @@ function JurnalUmumForm({ isEdit }) {
     e.preventDefault();
     const { debet, kredit, ...data } = jurnal;
 
-    const payload = {
+    let payload = {
       ...data,
       debet: parseInt(debet),
       kredit: parseInt(kredit),
     };
 
+    if (jurnal.tanggalJurnal === undefined) {
+      payload = {
+        ...payload,
+        tanggalJurnal: formatDate(new Date()),
+      };
+    }
+
     if (isEdit) {
-      let response = await updateJurnal(payload);
+      let response = await updateJurnal(payload, config);
     } else {
-      let response = await createJurnal(payload);
+      let response = await createJurnal(payload, config);
     }
 
     navigate("/jurnal-umum");
@@ -65,7 +80,11 @@ function JurnalUmumForm({ isEdit }) {
             type="date"
             className="form-control"
             name="tanggalJurnal"
-            value={formatDate(jurnal.tanggalJurnal) || ""}
+            value={
+              jurnal.tanggalJurnal
+                ? formatDate(jurnal.tanggalJurnal)
+                : formatDate(new Date())
+            }
             onChange={handleChange}
             required
           />
@@ -86,15 +105,27 @@ function JurnalUmumForm({ isEdit }) {
 
         <div className="col-md-12 my-2">
           <label className="form-label">Nomor Bukti</label>
-          <input
-            type="text"
-            className="form-control"
-            name="nomerBukti"
-            placeholder="Masukkan nomor bukti jurnal"
-            value={jurnal.nomerBukti || ""}
-            onChange={handleChange}
-            required
-          />
+          {jurnal.nomerBukti ? (
+            <input
+              type="text"
+              className="form-control"
+              name="nomerBukti"
+              placeholder="Masukkan nomor bukti jurnal"
+              value={jurnal.nomerBukti || ""}
+              onChange={handleChange}
+              required
+            />
+          ) : (
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Masukkan nomor bukti jurnal"
+              name="nomerBukti"
+              value={jurnal.nomerBukti || 0}
+              onChange={handleChange}
+              required
+            />
+          )}
         </div>
 
         <div className="col-md-12 my-2">
