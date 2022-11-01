@@ -261,8 +261,8 @@ function NeracaSaldoPage() {
                 <tr key={index}>
                   <td>{neraca._id.kodePerkiraan}</td>
                   <td>{neraca._id.namaPerkiraan}</td>
-                  <td>{`Rp${neraca.Debet.toLocaleString()}`}</td>
-                  <td>{`Rp${neraca.Kredit.toLocaleString()}`}</td>
+                  <td>{`Rp${neraca.Debet.toLocaleString("id")}`}</td>
+                  <td>{`Rp${neraca.Kredit.toLocaleString("id")}`}</td>
                   <td>{`Rp${(neraca.Debet - neraca.Kredit).toLocaleString(
                     "id"
                   )}`}</td>

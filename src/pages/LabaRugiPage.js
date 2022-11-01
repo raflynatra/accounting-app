@@ -281,17 +281,15 @@ const LabaRugiPage = () => {
             </div>
             <div className="col ">
               <h6>Total Debit</h6>
-              <h5>{`Rp ${parseInt(total.totalDebet).toLocaleString("id")}`}</h5>
+              <h5>{`Rp${parseInt(total.totalDebet).toLocaleString("id")}`}</h5>
             </div>
             <div className="col ">
               <h6>Total Kredit</h6>
-              <h5>{`Rp ${parseInt(total.totalKredit).toLocaleString(
-                "id"
-              )}`}</h5>
+              <h5>{`Rp${parseInt(total.totalKredit).toLocaleString("id")}`}</h5>
             </div>
             <div className="col ">
               <h6>Total Saldo</h6>
-              <h5>{`Rp ${parseFloat(total.totalSaldo).toLocaleString(
+              <h5>{`Rp${parseFloat(total.totalSaldo).toLocaleString(
                 "id"
               )}`}</h5>
             </div>
@@ -319,9 +317,9 @@ const LabaRugiPage = () => {
                   <td>{formatDateTable(a._id.tanggalJurnal)}</td>
                   <td>{a._id.namaPerkiraan}</td>
                   <td>{a._id.kodePerkiraan}</td>
-                  <td>Rp. {a.debet.toLocaleString()}</td>
-                  <td>Rp. {a.kredit.toLocaleString()}</td>
-                  <td>Rp. {(a.debet - a.kredit).toLocaleString("id")}</td>
+                  <td>Rp{a.debet.toLocaleString("id")}</td>
+                  <td>Rp{a.kredit.toLocaleString("id")}</td>
+                  <td>Rp{(a.debet - a.kredit).toLocaleString("id")}</td>
                 </tr>
               ))
             ) : (

@@ -105,15 +105,27 @@ function JurnalUmumForm({ isEdit }) {
 
         <div className="col-md-12 my-2">
           <label className="form-label">Nomor Bukti</label>
-          <input
-            type="text"
-            className="form-control"
-            name="nomerBukti"
-            placeholder="Masukkan nomor bukti jurnal"
-            value={jurnal.nomerBukti || ""}
-            onChange={handleChange}
-            required
-          />
+          {jurnal.nomerBukti ? (
+            <input
+              type="text"
+              className="form-control"
+              name="nomerBukti"
+              placeholder="Masukkan nomor bukti jurnal"
+              value={jurnal.nomerBukti || ""}
+              onChange={handleChange}
+              required
+            />
+          ) : (
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Masukkan nomor bukti jurnal"
+              name="nomerBukti"
+              value={jurnal.nomerBukti || 0}
+              onChange={handleChange}
+              required
+            />
+          )}
         </div>
 
         <div className="col-md-12 my-2">
