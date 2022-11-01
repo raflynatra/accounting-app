@@ -138,7 +138,7 @@ export const PerkiraanTable = (props) => {
             props.type === "dashboard" ? (
               index < 5 ? (
                 <tr key={index}>
-                  <td>{new Date(a.updatedAt).toLocaleString()}</td>
+                  <td>{formatDateTable(a.updatedAt)}</td>
                   <td>{a.kode_perkiraan}</td>
                   <td>{a.nama_perkiraan}</td>
                   <td>{a.kelompok_akun}</td>

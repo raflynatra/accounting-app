@@ -12,7 +12,7 @@ const styles = {
     margin: "10px 0",
     border: `1px solid #8da9fc`,
     borderRadius: "10px",
-    minHeight: "102px",
+    minHeight: "140px",
     position: "relative",
   },
   row1: {
