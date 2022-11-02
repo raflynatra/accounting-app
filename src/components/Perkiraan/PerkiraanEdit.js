@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { BASE_URL } from "../../utils/Helper";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import ToastComponent from "../ToastComponent";
 
 const PerkiraanEdit = () => {
   const [kode_perkiraan, setKodePerkiraan] = useState("");
   const [nama_perkiraan, setNamaPerkiraan] = useState("");
   const [kelompok_akun, setKelompokAkun] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [apiResponse, setApiResponse] = useState({});
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -42,49 +45,68 @@ const PerkiraanEdit = () => {
       );
       navigate("/perkiraan");
     } catch (error) {
-      console.log(error);
+      setShowToast(true);
+      setApiResponse({
+        variant: "danger",
+        header: "Error!",
+        message:
+          error.response.data.code === 403
+            ? "Mohon maaf, Anda tidak memiliki hak untuk mengubah data."
+            : error.response.data.message,
+      });
     }
   };
 
-  return (
-    <div className="container">
-      <h3>Edit Perkiraan</h3>
-      <form onSubmit={updatePerkiraan}>
-        <div className="col-md-12 my-2">
-          <label className="form-label">Kode Perkiraan</label>
-          <input
-            type="text"
-            className="form-control"
-            value={kode_perkiraan}
-            onChange={(e) => setKodePerkiraan(e.target.value)}
-          />
-        </div>
-        <div className="col-md-12 my-2">
-          <label className="form-label">Nama Perkiraan</label>
-          <input
-            type="text"
-            className="form-control"
-            value={nama_perkiraan}
-            onChange={(e) => setNamaPerkiraan(e.target.value)}
-          />
-        </div>
+  const handleClose = () => {
+    setShowToast(false);
+  };
 
-        <div className="col-md-12 my-2">
-          <label className="form-label">Kelompok Akun</label>
-          <input
-            type="text"
-            className="form-control"
-            value={kelompok_akun}
-            onChange={(e) => setKelompokAkun(e.target.value)}
-          />
-        </div>
-        <div className="col-12 my-2">
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+  return (
+    <>
+      <ToastComponent
+        response={apiResponse}
+        show={showToast}
+        handleClose={handleClose}
+      />
+      <div className="container">
+        <h3>Edit Perkiraan</h3>
+        <form onSubmit={updatePerkiraan}>
+          <div className="col-md-12 my-2">
+            <label className="form-label">Kode Perkiraan</label>
+            <input
+              type="text"
+              className="form-control"
+              value={kode_perkiraan}
+              onChange={(e) => setKodePerkiraan(e.target.value)}
+            />
+          </div>
+          <div className="col-md-12 my-2">
+            <label className="form-label">Nama Perkiraan</label>
+            <input
+              type="text"
+              className="form-control"
+              value={nama_perkiraan}
+              onChange={(e) => setNamaPerkiraan(e.target.value)}
+            />
+          </div>
+
+          <div className="col-md-12 my-2">
+            <label className="form-label">Kelompok Akun</label>
+            <input
+              type="text"
+              className="form-control"
+              value={kelompok_akun}
+              onChange={(e) => setKelompokAkun(e.target.value)}
+            />
+          </div>
+          <div className="col-12 my-2">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 

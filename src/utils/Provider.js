@@ -129,7 +129,7 @@ export const createJurnal = async (data, config) => {
     let response = await axios.post(`${BASE_URL}/jurnal`, data, config);
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -144,7 +144,7 @@ export const updateJurnal = async (payload, config) => {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -156,7 +156,7 @@ export const deleteJurnal = async (id, config) => {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 

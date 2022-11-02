@@ -6,10 +6,13 @@ import {
   updateJurnal,
 } from "../../utils/Provider";
 import { formatDate } from "../../utils/Helper";
+import ToastComponent from "../ToastComponent";
 
 function JurnalUmumForm({ isEdit }) {
   const [jurnal, setJurnal] = useState({});
   const [perkiraanList, setPerkiraanList] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const [apiResponse, setApiResponse] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -63,131 +66,160 @@ function JurnalUmumForm({ isEdit }) {
     }
 
     if (isEdit) {
-      try {
-        let response = await updateJurnal(payload, config);
-      } catch (error) {
-        console.log(error);
+      let response = await updateJurnal(payload, config);
+      if (response.code !== 200) {
+        console.log(response);
+        setShowToast(true);
+        setApiResponse({
+          variant: "danger",
+          header: "Error!",
+          message:
+            response.code === 403
+              ? "Mohon maaf, Anda tidak memiliki hak untuk mengubah data."
+              : response.message,
+        });
+      } else {
+        navigate("/jurnal-umum");
       }
-      navigate("/jurnal-umum");
     } else {
-      try {
-        let response = await createJurnal(payload, config);
-      } catch (error) {
-        console.log(error);
+      let response = await createJurnal(payload, config);
+      if (response.code !== 200) {
+        setShowToast(true);
+        setApiResponse({
+          variant: "danger",
+          header: "Error!",
+          message:
+            response.code === 403
+              ? "Mohon maaf, Anda tidak memiliki hak untuk menambah data."
+              : response.message,
+        });
+      } else {
+        navigate("/jurnal-umum");
       }
-      navigate("/jurnal-umum");
     }
   };
+
+  const handleClose = () => {
+    setShowToast(false);
+  };
+
   return (
-    <div className="container">
-      <h3>Tambah Jurnal</h3>
-      <form className="needs-validation" onSubmit={handleSubmit}>
-        <div className="col-md-12 my-2">
-          <label className="form-label">Tanggal</label>
-          <input
-            type="date"
-            className="form-control"
-            name="tanggalJurnal"
-            value={
-              jurnal.tanggalJurnal
-                ? formatDate(jurnal.tanggalJurnal)
-                : formatDate(new Date())
-            }
-            onChange={handleChange}
-            required
-          />
-        </div>
+    <>
+      <ToastComponent
+        response={apiResponse}
+        show={showToast}
+        handleClose={handleClose}
+      />
+      <div className="container">
+        <h3>Tambah Jurnal</h3>
+        <form className="needs-validation" onSubmit={handleSubmit}>
+          <div className="col-md-12 my-2">
+            <label className="form-label">Tanggal</label>
+            <input
+              type="date"
+              className="form-control"
+              name="tanggalJurnal"
+              value={
+                jurnal.tanggalJurnal
+                  ? formatDate(jurnal.tanggalJurnal)
+                  : formatDate(new Date())
+              }
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <div className="col-md-12 my-2">
-          <label className="form-label">Uraian</label>
-          <input
-            type="text"
-            className="form-control"
-            name="uraian"
-            placeholder="Masukkan uraian jurnal"
-            value={jurnal.uraian || ""}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="col-md-12 my-2">
-          <label className="form-label">Nomor Bukti</label>
-          {jurnal.nomerBukti ? (
+          <div className="col-md-12 my-2">
+            <label className="form-label">Uraian</label>
             <input
               type="text"
               className="form-control"
-              name="nomerBukti"
-              placeholder="Masukkan nomor bukti jurnal"
-              value={jurnal.nomerBukti || ""}
+              name="uraian"
+              placeholder="Masukkan uraian jurnal"
+              value={jurnal.uraian || ""}
               onChange={handleChange}
               required
             />
-          ) : (
+          </div>
+
+          <div className="col-md-12 my-2">
+            <label className="form-label">Nomor Bukti</label>
+            {jurnal.nomerBukti ? (
+              <input
+                type="text"
+                className="form-control"
+                name="nomerBukti"
+                placeholder="Masukkan nomor bukti jurnal"
+                value={jurnal.nomerBukti || ""}
+                onChange={handleChange}
+                required
+              />
+            ) : (
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Masukkan nomor bukti jurnal"
+                name="nomerBukti"
+                value={jurnal.nomerBukti || 0}
+                onChange={handleChange}
+                required
+              />
+            )}
+          </div>
+
+          <div className="col-md-12 my-2">
+            <label className="form-label">Nama Perkiraan Jurnal</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              name="namaPerkiraanJurnal"
+              value={jurnal.namaPerkiraanJurnal || ""}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Pilih Perkiraan Jurnal</option>
+              {perkiraanList.map((item) => (
+                <option value={item.nama_perkiraan} key={item.kode_perkiraan}>
+                  {item.nama_perkiraan}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="col-md-12 my-2">
+            <label className="form-label">Debit</label>
             <input
-              type="number"
+              type="text"
               className="form-control"
-              placeholder="Masukkan nomor bukti jurnal"
-              name="nomerBukti"
-              value={jurnal.nomerBukti || 0}
+              name="debet"
+              placeholder="Masukkan nominal debit"
+              value={jurnal.debet || ""}
               onChange={handleChange}
               required
             />
-          )}
-        </div>
+          </div>
 
-        <div className="col-md-12 my-2">
-          <label className="form-label">Nama Perkiraan Jurnal</label>
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            name="namaPerkiraanJurnal"
-            value={jurnal.namaPerkiraanJurnal || ""}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Pilih Perkiraan Jurnal</option>
-            {perkiraanList.map((item) => (
-              <option value={item.nama_perkiraan} key={item.kode_perkiraan}>
-                {item.nama_perkiraan}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="col-md-12 my-2">
+            <label className="form-label">Kredit</label>
+            <input
+              type="text"
+              className="form-control"
+              name="kredit"
+              placeholder="Masukkan nominal kredit"
+              value={jurnal.kredit || ""}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <div className="col-md-12 my-2">
-          <label className="form-label">Debit</label>
-          <input
-            type="text"
-            className="form-control"
-            name="debet"
-            placeholder="Masukkan nominal debit"
-            value={jurnal.debet || ""}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="col-md-12 my-2">
-          <label className="form-label">Kredit</label>
-          <input
-            type="text"
-            className="form-control"
-            name="kredit"
-            placeholder="Masukkan nominal kredit"
-            value={jurnal.kredit || ""}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="col-12 my-2">
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="col-12 my-2">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 

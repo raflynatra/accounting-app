@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { color } from "../../utils/Helper";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import ToastComponent from "../ToastComponent";
 
 const styles = {
   row: {
@@ -27,6 +28,8 @@ export const PerkiraanTable = (props) => {
   const [perkiraan, setPerkiraan] = useState([]);
   const [perkiraanTemporary, setPerkiraanTemporary] = useState([]);
   const [ids, setId] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [apiResponse, setApiResponse] = useState({});
 
   const config = {
     headers: {
@@ -38,7 +41,6 @@ export const PerkiraanTable = (props) => {
   // Modals
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
   const handleShow = (id) => {
     setId(id);
     setShow(true);
@@ -67,138 +69,158 @@ export const PerkiraanTable = (props) => {
     try {
       await axios.delete(`${BASE_URL}/perkiraan/delete/${id}`, config);
       getAllPerkiraan();
-      handleClose();
     } catch (error) {
-      console.log(error);
+      setShowToast(true);
+      setApiResponse({
+        variant: "danger",
+        header: "Error!",
+        message:
+          error.response.data.code === 403
+            ? "Mohon maaf, Anda tidak memiliki hak untuk menghapus data."
+            : error.response.data.message,
+      });
     }
+
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setShow(false);
   };
 
   return (
-    <div className="container">
-      {props.type === "dashboard" ? (
-        <div style={styles.row}>
-          <h3>Tabel Perkiraan</h3>
-          <div>
-            <Link
-              to="/perkiraan"
-              className="btn btn-primary me-2 "
-              style={styles.button}
-              type="button"
-            >
-              Lihat Tabel Selengkapnya
-            </Link>
+    <>
+      <ToastComponent
+        response={apiResponse}
+        show={showToast}
+        handleClose={() => setShowToast(false)}
+      />
+      <div className="container">
+        {props.type === "dashboard" ? (
+          <div style={styles.row}>
+            <h3>Tabel Perkiraan</h3>
+            <div>
+              <Link
+                to="/perkiraan"
+                className="btn btn-primary me-2 "
+                style={styles.button}
+                type="button"
+              >
+                Lihat Tabel Selengkapnya
+              </Link>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div style={styles.row}>
-          <div>
-            <Link
-              to="/perkiraan/create"
-              className="btn btn-primary me-2 "
-              style={styles.button}
-              type="button"
-            >
-              Tambah Perkiraan
-            </Link>
+        ) : (
+          <div style={styles.row}>
+            <div>
+              <Link
+                to="/perkiraan/create"
+                className="btn btn-primary me-2 "
+                style={styles.button}
+                type="button"
+              >
+                Tambah Perkiraan
+              </Link>
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Cari Perkiraan"
+                className="form-control"
+                onChange={(e) => handleSearch(e)}
+              />
+            </div>
           </div>
-          <div>
-            <input
-              type="text"
-              placeholder="Cari Perkiraan"
-              className="form-control"
-              onChange={(e) => handleSearch(e)}
-            />
-          </div>
-        </div>
-      )}
+        )}
 
-      <table className="table table-striped">
-        <thead>
-          {props.type === "dashboard" ? (
-            <tr>
-              <th scope="col">Tanggal</th>
-              <th scope="col">Kode Perkiraan</th>
-              <th scope="col">Nama Perkiraan</th>
-              <th scope="col">Kelompok Akun</th>
-              <th scope="col">Kelompok Laporan</th>
-            </tr>
-          ) : (
-            <tr>
-              <th scope="col">Tanggal</th>
-              <th scope="col">Kode Perkiraan</th>
-              <th scope="col">Nama Perkiraan</th>
-              <th scope="col">Kelompok Akun</th>
-              <th scope="col">Kelompok Laporan</th>
-              <th scope="col">Action</th>
-            </tr>
-          )}
-        </thead>
-        <tbody>
-          {perkiraanTemporary.map((a, index) =>
-            props.type === "dashboard" ? (
-              index < 5 ? (
+        <table className="table table-striped">
+          <thead>
+            {props.type === "dashboard" ? (
+              <tr>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Kode Perkiraan</th>
+                <th scope="col">Nama Perkiraan</th>
+                <th scope="col">Kelompok Akun</th>
+                <th scope="col">Kelompok Laporan</th>
+              </tr>
+            ) : (
+              <tr>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Kode Perkiraan</th>
+                <th scope="col">Nama Perkiraan</th>
+                <th scope="col">Kelompok Akun</th>
+                <th scope="col">Kelompok Laporan</th>
+                <th scope="col">Action</th>
+              </tr>
+            )}
+          </thead>
+          <tbody>
+            {perkiraanTemporary.map((a, index) =>
+              props.type === "dashboard" ? (
+                index < 5 ? (
+                  <tr key={index}>
+                    <td>{formatDateTable(a.updatedAt)}</td>
+                    <td>{a.kode_perkiraan}</td>
+                    <td>{a.nama_perkiraan}</td>
+                    <td>{a.kelompok_akun}</td>
+                    <td>{a.kelompok_laporan}</td>
+                  </tr>
+                ) : (
+                  ""
+                )
+              ) : (
                 <tr key={index}>
                   <td>{formatDateTable(a.updatedAt)}</td>
                   <td>{a.kode_perkiraan}</td>
                   <td>{a.nama_perkiraan}</td>
                   <td>{a.kelompok_akun}</td>
                   <td>{a.kelompok_laporan}</td>
+                  <td>
+                    <Link
+                      to={`/perkiraan/edit/${a.kode_perkiraan}`}
+                      className="btn btn-warning mx-2"
+                    >
+                      Ubah
+                    </Link>
+                    <Button
+                      variant="danger"
+                      onClick={() => handleShow(a.kode_perkiraan)}
+                    >
+                      Hapus
+                    </Button>
+                  </td>
                 </tr>
-              ) : (
-                ""
               )
-            ) : (
-              <tr key={index}>
-                <td>{formatDateTable(a.updatedAt)}</td>
-                <td>{a.kode_perkiraan}</td>
-                <td>{a.nama_perkiraan}</td>
-                <td>{a.kelompok_akun}</td>
-                <td>{a.kelompok_laporan}</td>
-                <td>
-                  <Link
-                    to={`/perkiraan/edit/${a.kode_perkiraan}`}
-                    className="btn btn-warning mx-2"
-                  >
-                    Ubah
-                  </Link>
-                  <Button
-                    variant="danger"
-                    onClick={() => handleShow(a.kode_perkiraan)}
-                  >
-                    Hapus
-                  </Button>
-                </td>
-              </tr>
-            )
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton className="bg-warning bg-opacity-75">
-          <Modal.Title>Perhatian!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h5>Apakah Anda yakin ingin menghapus data ini?</h5>
-          <p>
-            Data akan terhapus dan perubahan ini tidak dapat dikembalikan
-            kemudian.
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Batal
-          </Button>
-          <Button
-            variant="danger"
-            onClick={() => {
-              deletePerkiraan(ids);
-            }}
-          >
-            Iya, benar!
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton className="bg-warning bg-opacity-75">
+            <Modal.Title>Perhatian!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h5>Apakah Anda yakin ingin menghapus data ini?</h5>
+            <p>
+              Data akan terhapus dan perubahan ini tidak dapat dikembalikan
+              kemudian.
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Batal
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                deletePerkiraan(ids);
+              }}
+            >
+              Iya, benar!
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    </>
   );
 };
