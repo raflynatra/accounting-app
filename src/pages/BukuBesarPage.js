@@ -159,7 +159,8 @@ function BukuBesarPage() {
         date = date.getFullYear();
         response = await getJurnalPDFByDate(date);
       } else {
-        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
         response = await getJurnalPDFByDate(date);
       }
       if (response.status === 200) {
@@ -181,7 +182,7 @@ function BukuBesarPage() {
         link.href = url;
         link.setAttribute(
           "download",
-          `LAPORAN-BUKU_BESAR-ACCOUTNING-${searchPerkiraan}.pdf`
+          `LAPORAN-BUKU_BESAR-ACCOUNTING-${searchPerkiraan}.pdf`
         );
         document.body.appendChild(link);
         link.click();
@@ -194,7 +195,7 @@ function BukuBesarPage() {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", `LAPORAN-BUKU_BESAR-ACCOUTNING.pdf`);
+        link.setAttribute("download", `LAPORAN-BUKU_BESAR-ACCOUNTING.pdf`);
         document.body.appendChild(link);
         link.click();
       }

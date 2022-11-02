@@ -126,14 +126,14 @@ const LabaRugiPage = () => {
         date = `${date.getFullYear()}/${date.getMonth() + 1}`;
         response = await getLabaRugiByDate(date);
       } else if (filterValue.filterPeriode === "tahunan") {
-        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
         date = date.getFullYear();
         response = await getLabaRugiByDate(date);
       } else {
         console.log("c");
         date = filterValue.filterPeriode;
         console.log("z", date);
-        let dataCoba = date.split("-")
+        let dataCoba = date.split("-");
         date = `${dataCoba[0]}/${dataCoba[1]}/${dataCoba[2]}`;
         console.log(dataCoba);
         response = await getLabaRugiByDate(date);
@@ -186,7 +186,7 @@ const LabaRugiPage = () => {
         response = await getLabaRugiPDFByDate(date);
       } else {
         // date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
-        let dataCoba = date.split("-")
+        let dataCoba = date.split("-");
         date = `${dataCoba[0]}/${dataCoba[1]}/${dataCoba[2]}`;
         response = await getLabaRugiPDFByDate(date);
       }

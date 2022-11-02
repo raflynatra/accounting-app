@@ -63,12 +63,20 @@ function JurnalUmumForm({ isEdit }) {
     }
 
     if (isEdit) {
-      let response = await updateJurnal(payload, config);
+      try {
+        let response = await updateJurnal(payload, config);
+      } catch (error) {
+        console.log(error);
+      }
+      navigate("/jurnal-umum");
     } else {
-      let response = await createJurnal(payload, config);
+      try {
+        let response = await createJurnal(payload, config);
+      } catch (error) {
+        console.log(error);
+      }
+      navigate("/jurnal-umum");
     }
-
-    navigate("/jurnal-umum");
   };
   return (
     <div className="container">

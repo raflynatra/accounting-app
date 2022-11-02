@@ -116,7 +116,8 @@ function NeracaSaldoPage() {
         date = date.getFullYear();
         response = await getNeracaSaldoPDFByDate(date);
       } else {
-        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
         response = await getNeracaSaldoPDFByDate(date);
       }
       if (response.status === 200) {

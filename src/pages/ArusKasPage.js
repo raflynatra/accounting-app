@@ -131,7 +131,8 @@ function ArusKasPage() {
         date = date.getFullYear();
         response = await getArusKasPDFByDate(date);
       } else {
-        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+        date = new Date(filterValue.filterPeriode);
+        date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
         response = await getArusKasPDFByDate(date);
       }
       if (response.status === 200) {
@@ -140,7 +141,7 @@ function ArusKasPage() {
         link.href = url;
         link.setAttribute(
           "download",
-          `LAPORAN-BUKU_BESAR-ACCOUTNING-${date}.pdf`
+          `LAPORAN-ARUS_KAS-ACCOUNTING-${date}.pdf`
         );
         document.body.appendChild(link);
         link.click();
@@ -151,7 +152,7 @@ function ArusKasPage() {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", `LAPORAN-BUKU_BESAR-ACCOUTNING.pdf`);
+        link.setAttribute("download", `LAPORAN-ARUS_KAS-ACCOUNTING.pdf`);
         document.body.appendChild(link);
         link.click();
       }
