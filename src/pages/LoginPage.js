@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import loginIllu from "../assets/img/logo-illu.jpg";
 import logo from "../assets/img/app-logo.svg";
 import { color } from "../utils/Helper";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/Helper";
 
@@ -48,9 +48,12 @@ const styles = {
 function LoginPage() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { username, password };
     const config = {
@@ -60,16 +63,22 @@ function LoginPage() {
       },
     };
 
-    axios
-      .post(`${BASE_URL}/user/signin`, payload, config)
-      .then((response) => {
-        localStorage.setItem("token", `JWT ${response.data.accessToken}`);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      let response = await axios.post(
+        `${BASE_URL}/user/signin`,
+        payload,
+        config
+      );
+
+      const accessToken = `JWT ${response.data.accessToken}`;
+      localStorage.setItem("token", accessToken);
+
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <div style={styles.container}>
       <div className="container">

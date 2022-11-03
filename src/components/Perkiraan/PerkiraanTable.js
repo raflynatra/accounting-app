@@ -28,11 +28,12 @@ const styles = {
 export const PerkiraanTable = (props) => {
   const [perkiraan, setPerkiraan] = useState([]);
   const [perkiraanTemporary, setPerkiraanTemporary] = useState([]);
-  const [ids, setId] = useState(null);
+  const [id, setId] = useState(null);
+
   const [showToast, setShowToast] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
+
   const user = jwtDecode(localStorage.getItem("token"));
-  console.log(user.role);
 
   const config = {
     headers: {
@@ -220,7 +221,7 @@ export const PerkiraanTable = (props) => {
             <Button
               variant="danger"
               onClick={() => {
-                deletePerkiraan(ids);
+                deletePerkiraan(id);
               }}
             >
               Iya, benar!

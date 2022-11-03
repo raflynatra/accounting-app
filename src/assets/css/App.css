@@ -28,3 +28,16 @@
   background-color: #c9d3f2;
   filter: contrast(1.15);
 }
+
+.dropdown-menu > li > span {
+  color: #4d3fa6;
+}
+
+.dropdown-menu > li > span:hover {
+  background-color: #a0b4f2;
+}
+
+.dropdown-menu > li > span:active {
+  color: white;
+  background-color: #4d3fa6;
+}

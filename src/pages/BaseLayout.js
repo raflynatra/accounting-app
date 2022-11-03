@@ -26,16 +26,18 @@ const styles = {
 
 function BaseLayout({ user }) {
   const [pageTitle, setPageTitle] = useState("");
-  let currRoutes = [];
+
   const location = useLocation();
+  let currRoutes = [];
+  currRoutes = location.pathname !== "/" ? location.pathname.split("/") : [];
+  currRoutes.length > 0 && currRoutes.shift();
+  const path = currRoutes[0];
+
   const navigate = useNavigate();
-  user = localStorage.getItem("token")
-    ? jwtDecode(localStorage.getItem("token"))
-    : user;
 
   const checkTokenExpiration = () => {
     const decodeToken = jwtDecode(localStorage.getItem("token"));
-    let currDate = new Date();
+    const currDate = new Date();
 
     if (decodeToken.exp * 1000 < currDate.getTime()) {
       alert("Token Expired!");
@@ -44,15 +46,9 @@ function BaseLayout({ user }) {
     }
   };
 
-  currRoutes = location.pathname !== "/" ? location.pathname.split("/") : [];
-  if (currRoutes.length > 0) {
-    currRoutes.shift();
-  }
-
-  const path = currRoutes[0];
-
   useEffect(() => {
     checkTokenExpiration();
+
     if (currRoutes.length > 0) {
       if (path.includes("perkiraan")) {
         setPageTitle("Perkiraan");
