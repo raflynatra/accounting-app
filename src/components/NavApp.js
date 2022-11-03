@@ -12,7 +12,7 @@ const styles = {
   },
 };
 
-function NavApp({ pageTitle }) {
+function NavApp({ pageTitle, user }) {
   const navigate = useNavigate();
   return (
     <div>
@@ -21,17 +21,34 @@ function NavApp({ pageTitle }) {
         style={{ backgroundColor: "#A0B4F2", minHeight: "40px" }}
       >
         <h1 style={{ color: color.primary }}>{pageTitle}</h1>
-        <button
-          className="btn"
-          type="submit"
-          style={styles.button}
-          onClick={() => {
-            localStorage.removeItem("token");
-            navigate("/login");
-          }}
-        >
-          Logout
-        </button>
+        <div id="navbarNavDarkDropdown">
+          <ul className="navbar-nav">
+            <li className="nav-item dropdown">
+              <span
+                className="h5 dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ cursor: "pointer", color: color.primary }}
+              >
+                Hello, {user.username}!
+              </span>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                  <span
+                    style={{ cursor: "pointer" }}
+                    className="dropdown-item"
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      navigate("/login");
+                    }}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </nav>
     </div>
   );

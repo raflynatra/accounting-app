@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/img/app-logo.svg";
-import { color } from "../utils/Helper";
 
-function Sidebar() {
+function Sidebar({ user }) {
   const [path, setPath] = useState("/");
 
   useEffect(() => {
@@ -101,16 +100,20 @@ function Sidebar() {
           >
             Jurnal Umum
           </Link>
-          <Link
-            className={
-              path.includes("/master-user")
-                ? "h6 side-hover text-center py-2 active-sidebar"
-                : "h6 side-hover py-2"
-            }
-            to="/master-user"
-          >
-            User
-          </Link>
+          {user.role === "ADMIN" && (
+            <>
+              <Link
+                className={
+                  path.includes("/master-user")
+                    ? "h6 side-hover text-center py-2 active-sidebar"
+                    : "h6 side-hover py-2"
+                }
+                to="/master-user"
+              >
+                User
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

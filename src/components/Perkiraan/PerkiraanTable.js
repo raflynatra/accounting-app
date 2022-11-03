@@ -6,6 +6,7 @@ import { color } from "../../utils/Helper";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ToastComponent from "../ToastComponent";
+import jwtDecode from "jwt-decode";
 
 const styles = {
   row: {
@@ -30,6 +31,8 @@ export const PerkiraanTable = (props) => {
   const [ids, setId] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
+  const user = jwtDecode(localStorage.getItem("token"));
+  console.log(user.role);
 
   const config = {
     headers: {
@@ -113,14 +116,16 @@ export const PerkiraanTable = (props) => {
         ) : (
           <div style={styles.row}>
             <div>
-              <Link
-                to="/perkiraan/create"
-                className="btn btn-primary me-2 "
-                style={styles.button}
-                type="button"
-              >
-                Tambah Perkiraan
-              </Link>
+              {user.role === "ADMIN" && (
+                <Link
+                  to="/perkiraan/create"
+                  className="btn btn-primary me-2 "
+                  style={styles.button}
+                  type="button"
+                >
+                  Tambah Perkiraan
+                </Link>
+              )}
             </div>
             <div>
               <input
@@ -150,7 +155,7 @@ export const PerkiraanTable = (props) => {
                 <th scope="col">Nama Perkiraan</th>
                 <th scope="col">Kelompok Akun</th>
                 <th scope="col">Kelompok Laporan</th>
-                <th scope="col">Action</th>
+                {props.role === "ADMIN" && <th scope="col">Action</th>}
               </tr>
             )}
           </thead>
@@ -175,20 +180,22 @@ export const PerkiraanTable = (props) => {
                   <td>{a.nama_perkiraan}</td>
                   <td>{a.kelompok_akun}</td>
                   <td>{a.kelompok_laporan}</td>
-                  <td>
-                    <Link
-                      to={`/perkiraan/edit/${a.kode_perkiraan}`}
-                      className="btn btn-warning mx-2"
-                    >
-                      Ubah
-                    </Link>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleShow(a.kode_perkiraan)}
-                    >
-                      Hapus
-                    </Button>
-                  </td>
+                  {user.role === "ADMIN" && (
+                    <td>
+                      <Link
+                        to={`/perkiraan/edit/${a.kode_perkiraan}`}
+                        className="btn btn-warning mx-2"
+                      >
+                        Ubah
+                      </Link>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleShow(a.kode_perkiraan)}
+                      >
+                        Hapus
+                      </Button>
+                    </td>
+                  )}
                 </tr>
               )
             )}

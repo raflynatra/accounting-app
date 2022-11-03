@@ -83,7 +83,7 @@ function JurnalUmumForm({ isEdit }) {
       }
     } else {
       let response = await createJurnal(payload, config);
-      if (response.code !== 200) {
+      if (response.code !== 201) {
         setShowToast(true);
         setApiResponse({
           variant: "danger",

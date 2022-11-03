@@ -154,9 +154,10 @@ export const deleteJurnal = async (id, config) => {
       `${BASE_URL}/jurnal/delete/${id}`,
       config
     );
-    return response.data;
+    return response;
   } catch (error) {
-    return error.response.data;
+    console.log(error);
+    // return error.response.data;
   }
 };
 

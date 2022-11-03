@@ -12,16 +12,27 @@ const MasterUserForm = () => {
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
 
   const saveUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${BASE_URL}/user/signup`, {
-        username,
-        email,
-        password,
-        role,
-      });
+      await axios.post(
+        `${BASE_URL}/user/signup`,
+        {
+          username,
+          email,
+          password,
+          role,
+        },
+        config
+      );
       navigate("/master-user");
     } catch (error) {
       setShowToast(true);

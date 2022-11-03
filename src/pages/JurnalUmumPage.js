@@ -4,6 +4,7 @@ import { color } from "../utils/Helper";
 import { useNavigate } from "react-router-dom";
 import JurnalUmumTable from "../components/JurnalUmum/JurnalUmumTable";
 import ToastComponent from "../components/ToastComponent";
+import jwtDecode from "jwt-decode";
 
 const styles = {
   row: {
@@ -27,6 +28,7 @@ function JurnalUmumPage({ type }) {
   const [searchValue, setSearchValue] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
+  const user = jwtDecode(localStorage.getItem("token"));
 
   const navigate = useNavigate();
   const config = {
@@ -48,7 +50,7 @@ function JurnalUmumPage({ type }) {
 
   const handleDelete = async (id) => {
     let response = await deleteJurnal(id, config);
-    if (response.code !== 200) {
+    if (response.status !== 204) {
       setShowToast(true);
       setApiResponse({
         variant: "danger",
@@ -88,13 +90,15 @@ function JurnalUmumPage({ type }) {
         ) : (
           <div style={styles.row}>
             <div>
-              <button
-                className="btn"
-                style={styles.button}
-                onClick={() => navigate("/jurnal-umum/create")}
-              >
-                Tambah Jurnal
-              </button>
+              {user.role === "ADMIN" && (
+                <button
+                  className="btn"
+                  style={styles.button}
+                  onClick={() => navigate("/jurnal-umum/create")}
+                >
+                  Tambah Jurnal
+                </button>
+              )}
             </div>
             <div>
               <input
@@ -113,7 +117,7 @@ function JurnalUmumPage({ type }) {
             navigate={navigate}
             searchValue={searchValue}
             type={type}
-            isBukuBesar={false}
+            isBukuBesar={user.role === "ADMIN" ? false : true}
           />
         </div>
       </div>

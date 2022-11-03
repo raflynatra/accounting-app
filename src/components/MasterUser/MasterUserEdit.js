@@ -12,6 +12,13 @@ const MasterUserEdit = () => {
   const { id } = useParams();
   const [showToast, setShowToast] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
 
   useEffect(() => {
     getUserById();
@@ -32,11 +39,15 @@ const MasterUserEdit = () => {
     e.preventDefault();
     console.log("test", username, email, role, id);
     try {
-      await axios.put(`${BASE_URL}/user/${id}`, {
-        username,
-        email,
-        role,
-      });
+      await axios.put(
+        `${BASE_URL}/user/${id}`,
+        {
+          username,
+          email,
+          role,
+        },
+        config
+      );
       navigate("/master-user");
     } catch (error) {
       setShowToast(true);

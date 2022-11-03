@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { PerkiraanTable } from "../components/Perkiraan/PerkiraanTable";
 import JurnalUmumPage from "../pages/JurnalUmumPage";
 

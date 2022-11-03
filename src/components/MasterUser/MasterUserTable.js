@@ -39,6 +39,14 @@ const MasterUserTable = (props) => {
     setShow(true);
   };
 
+  const config = {
+    headers: {
+      "Access-Control-Allow-Origin": true,
+      "Content-Type": "application/json",
+      authorization: localStorage.getItem("token"),
+    },
+  };
+
   useEffect(() => {
     getAllUser();
   }, []);
@@ -50,7 +58,7 @@ const MasterUserTable = (props) => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/user/delete/${id}`);
+      await axios.delete(`${BASE_URL}/user/delete/${id}`, config);
       getAllUser();
     } catch (error) {
       setShowToast(true);

@@ -24,11 +24,14 @@ const styles = {
   },
 };
 
-function BaseLayout() {
+function BaseLayout({ user }) {
   const [pageTitle, setPageTitle] = useState("");
   let currRoutes = [];
   const location = useLocation();
   const navigate = useNavigate();
+  user = localStorage.getItem("token")
+    ? jwtDecode(localStorage.getItem("token"))
+    : user;
 
   const checkTokenExpiration = () => {
     const decodeToken = jwtDecode(localStorage.getItem("token"));
@@ -49,8 +52,8 @@ function BaseLayout() {
   const path = currRoutes[0];
 
   useEffect(() => {
+    checkTokenExpiration();
     if (currRoutes.length > 0) {
-      checkTokenExpiration();
       if (path.includes("perkiraan")) {
         setPageTitle("Perkiraan");
       } else if (path.includes("jurnal")) {
@@ -77,10 +80,10 @@ function BaseLayout() {
     <div className="container-fluid">
       <div className="row" style={styles.row}>
         <div className="col-md-2" style={styles.col}>
-          <Sidebar />
+          <Sidebar user={user} />
         </div>
         <div className="col-md-10">
-          <NavApp pageTitle={pageTitle} />
+          <NavApp pageTitle={pageTitle} user={user} />
           <div className="my-3 p-3 rounded" style={styles.content}>
             <Breadcrumbs pathname={currRoutes} />
             <Outlet />
