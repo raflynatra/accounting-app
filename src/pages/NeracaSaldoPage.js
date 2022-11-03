@@ -43,7 +43,12 @@ function NeracaSaldoPage() {
     totalKredit: 0,
     totalSaldo: 0,
   });
+
   const [filterValue, setFilterValue] = useState({});
+  const [checked, setChecked] = useState({
+    tahunan: false,
+    bulanan: false,
+  });
 
   const config = {
     headers: {
@@ -148,11 +153,19 @@ function NeracaSaldoPage() {
     const name = e.target.name;
     const value = e.target.value;
 
+    value === "bulanan"
+      ? setChecked((prev) => ({ ...prev, bulanan: true }))
+      : setChecked((prev) => ({ ...prev, tahunan: true }));
+
     setFilterValue((values) => ({ ...values, [name]: value }));
   };
 
   const clearFilter = () => {
     setFilterValue({});
+    setChecked({
+      tahunan: false,
+      bulanan: false,
+    });
   };
 
   useEffect(() => {
@@ -188,6 +201,7 @@ function NeracaSaldoPage() {
                   value="bulanan"
                   id="filterMonth"
                   onChange={handleChange}
+                  checked={checked.bulanan}
                 />
                 <label className="form-check-label" htmlFor="filterMonth">
                   Bulanan
@@ -201,6 +215,7 @@ function NeracaSaldoPage() {
                   value="tahunan"
                   id="filterYear"
                   onChange={handleChange}
+                  checked={checked.tahunan}
                 />
                 <label className="form-check-label" htmlFor="filterYear">
                   Tahunan

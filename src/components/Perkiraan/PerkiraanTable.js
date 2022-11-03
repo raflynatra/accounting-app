@@ -131,7 +131,7 @@ export const PerkiraanTable = (props) => {
             <div>
               <input
                 type="text"
-                placeholder="Cari Perkiraan"
+                placeholder="Cari nama perkiraan"
                 className="form-control"
                 onChange={(e) => handleSearch(e)}
               />

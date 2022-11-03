@@ -41,10 +41,15 @@ const styles = {
 };
 
 const LabaRugiPage = () => {
-  const [labaRugi, setLabaRugi] = useState([]);
-  const [total, setTotal] = useState({});
-  const [filterValue, setFilterValue] = useState({});
   const [labaRugiList, setLabaRugiList] = useState([]);
+  const [total, setTotal] = useState({});
+
+  const [filterValue, setFilterValue] = useState({});
+  const [checked, setChecked] = useState({
+    tahunan: false,
+    bulanan: false,
+  });
+
   const config = {
     headers: {
       "Access-Control-Allow-Origin": true,
@@ -110,11 +115,19 @@ const LabaRugiPage = () => {
     const name = e.target.name;
     const value = e.target.value;
 
+    value === "bulanan"
+      ? setChecked((prev) => ({ ...prev, bulanan: true }))
+      : setChecked((prev) => ({ ...prev, tahunan: true }));
+
     setFilterValue((values) => ({ ...values, [name]: value }));
   };
 
   const clearFilter = () => {
     setFilterValue({});
+    setChecked({
+      bulanan: false,
+      tahunan: false,
+    });
   };
 
   const getLabaRugiList = async () => {
@@ -243,6 +256,7 @@ const LabaRugiPage = () => {
                   value="bulanan"
                   id="filterMonth"
                   onChange={handleChange}
+                  checked={checked.bulanan}
                 />
                 <label className="form-check-label" htmlFor="filterMonth">
                   Bulanan
@@ -256,6 +270,7 @@ const LabaRugiPage = () => {
                   value="tahunan"
                   id="filterYear"
                   onChange={handleChange}
+                  checked={checked.tahunan}
                 />
                 <label className="form-check-label" htmlFor="filterYear">
                   Tahunan

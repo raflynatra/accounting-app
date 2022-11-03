@@ -43,7 +43,12 @@ function ArusKasPage() {
     totalDebet: 0,
     totalKredit: 0,
   });
+
   const [filterValue, setFilterValue] = useState({});
+  const [checked, setChecked] = useState({
+    bulanan: false,
+    tahunan: false,
+  });
 
   const config = {
     headers: {
@@ -112,11 +117,19 @@ function ArusKasPage() {
     const name = e.target.name;
     const value = e.target.value;
 
+    value === "bulanan"
+      ? setChecked((prev) => ({ ...prev, bulanan: true }))
+      : setChecked((prev) => ({ ...prev, tahunan: true }));
+
     setFilterValue((values) => ({ ...values, [name]: value }));
   };
 
   const clearFilter = () => {
     setFilterValue({});
+    setChecked({
+      tahunan: false,
+      bulanan: false,
+    });
   };
 
   const downloadPDF = async () => {
@@ -188,6 +201,7 @@ function ArusKasPage() {
                   value="bulanan"
                   id="filterMonth"
                   onChange={handleChange}
+                  checked={checked.bulanan}
                 />
                 <label className="form-check-label" htmlFor="filterMonth">
                   Bulanan
@@ -201,6 +215,7 @@ function ArusKasPage() {
                   value="tahunan"
                   id="filterYear"
                   onChange={handleChange}
+                  checked={checked.tahunan}
                 />
                 <label className="form-check-label" htmlFor="filterYear">
                   Tahunan
@@ -251,7 +266,7 @@ function ArusKasPage() {
             <tr>
               <th>Nomor Jurnal</th>
               <th>Tanggal</th>
-              <th>Nomer Bukti</th>
+              <th>Nomor Bukti</th>
               <th>Uraian</th>
               <th>Nama Perkiraan</th>
               <th>Debit</th>

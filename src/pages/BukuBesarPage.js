@@ -48,9 +48,16 @@ function BukuBesarPage() {
     totalDebet: 0,
     totalKredit: 0,
   });
+
   const [filterValue, setFilterValue] = useState({});
   const [searchPerkiraan, setSearchPerkiraan] = useState("");
+  const [checked, setChecked] = useState({
+    bulanan: false,
+    tahunan: false,
+  });
+
   const navigate = useNavigate();
+
   const config = {
     headers: {
       "Access-Control-Allow-Origin": true,
@@ -126,6 +133,11 @@ function BukuBesarPage() {
     setPerkiraanList(response.data);
   };
 
+  useEffect(() => {
+    getJurnalList();
+    getPerkiraanList();
+  }, [filterValue, searchPerkiraan]);
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -133,6 +145,10 @@ function BukuBesarPage() {
     if (name === "searchPerkiraan") {
       setSearchPerkiraan(value);
     } else {
+      value === "bulanan"
+        ? setChecked((prev) => ({ ...prev, bulanan: true }))
+        : setChecked((prev) => ({ ...prev, tahunan: true }));
+
       setFilterValue((values) => ({ ...values, [name]: value }));
     }
   };
@@ -140,12 +156,11 @@ function BukuBesarPage() {
   const clearFilter = () => {
     setFilterValue({});
     setSearchPerkiraan("");
+    setChecked({
+      tahunan: false,
+      bulanan: false,
+    });
   };
-
-  useEffect(() => {
-    getJurnalList();
-    getPerkiraanList();
-  }, [filterValue, searchPerkiraan]);
 
   const downloadPDF = async () => {
     let response = "";
@@ -254,6 +269,7 @@ function BukuBesarPage() {
                   value="bulanan"
                   id="filterMonth"
                   onChange={handleChange}
+                  checked={checked.bulanan}
                 />
                 <label className="form-check-label" htmlFor="filterMonth">
                   Bulanan
@@ -267,6 +283,7 @@ function BukuBesarPage() {
                   value="tahunan"
                   id="filterYear"
                   onChange={handleChange}
+                  checked={checked.tahunan}
                 />
                 <label className="form-check-label" htmlFor="filterYear">
                   Tahunan
