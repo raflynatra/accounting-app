@@ -56,6 +56,8 @@ function BukuBesarPage() {
     tahunan: false,
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const config = {
@@ -126,6 +128,7 @@ function BukuBesarPage() {
         setJurnalList(response.data);
       }
     }
+    setIsLoading(false);
   };
 
   const getPerkiraanList = async () => {
@@ -299,17 +302,35 @@ function BukuBesarPage() {
             </div>
             <div className="col">
               <h6>Total Debit</h6>
-              <h5>{`Rp${total.totalDebet.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalDebet.toLocaleString("id")}`}</h5>
+              )}
             </div>
             <div className="col">
               <h6>Total Kredit</h6>
-              <h5>{`Rp${total.totalKredit.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalKredit.toLocaleString("id")}`}</h5>
+              )}
             </div>
             <div className="col">
               <h6>Total Saldo</h6>
-              <h5>{`Rp${(total.totalDebet - total.totalKredit).toLocaleString(
-                "id"
-              )}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${(total.totalDebet - total.totalKredit).toLocaleString(
+                  "id"
+                )}`}</h5>
+              )}
             </div>
             <button
               className="btn btn-sm mt-2"
@@ -323,10 +344,10 @@ function BukuBesarPage() {
       </div>
       <div>
         <JurnalUmumTable
-          jurnalList={jurnalList}
+          jurnalList={isLoading ? Array(3).fill({}) : jurnalList}
           navigate={navigate}
-          searchValue=""
           isBukuBesar={true}
+          isLoading={isLoading}
         />
       </div>
     </div>

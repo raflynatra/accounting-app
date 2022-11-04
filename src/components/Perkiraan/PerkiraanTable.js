@@ -33,7 +33,12 @@ export const PerkiraanTable = (props) => {
   const [showToast, setShowToast] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const user = jwtDecode(localStorage.getItem("token"));
+
+  // Modals
+  const [show, setShow] = useState(false);
 
   const config = {
     headers: {
@@ -42,8 +47,6 @@ export const PerkiraanTable = (props) => {
       authorization: localStorage.getItem("token"),
     },
   };
-  // Modals
-  const [show, setShow] = useState(false);
 
   const handleShow = (id) => {
     setId(id);
@@ -55,9 +58,13 @@ export const PerkiraanTable = (props) => {
   }, []);
 
   const getAllPerkiraan = async () => {
+    setPerkiraanTemporary(Array(3).fill({}));
+
     let response = await axios.get(`${BASE_URL}/perkiraan`, config);
     setPerkiraan(response.data.data);
     setPerkiraanTemporary(response.data.data);
+
+    setIsLoading(false);
   };
 
   // SEARCH
@@ -156,49 +163,100 @@ export const PerkiraanTable = (props) => {
                 <th scope="col">Nama Perkiraan</th>
                 <th scope="col">Kelompok Akun</th>
                 <th scope="col">Kelompok Laporan</th>
-                {props.role === "ADMIN" && <th scope="col">Action</th>}
+                {user.role === "ADMIN" && <th scope="col">Aksi</th>}
               </tr>
             )}
           </thead>
           <tbody>
-            {perkiraanTemporary.map((a, index) =>
-              props.type === "dashboard" ? (
-                index < 5 ? (
+            {perkiraanTemporary.length > 0 ? (
+              isLoading ? (
+                perkiraanTemporary.map((item, index) => (
                   <tr key={index}>
-                    <td>{formatDateTable(a.updatedAt)}</td>
-                    <td>{a.kode_perkiraan}</td>
-                    <td>{a.nama_perkiraan}</td>
-                    <td>{a.kelompok_akun}</td>
-                    <td>{a.kelompok_laporan}</td>
-                  </tr>
-                ) : (
-                  ""
-                )
-              ) : (
-                <tr key={index}>
-                  <td>{formatDateTable(a.updatedAt)}</td>
-                  <td>{a.kode_perkiraan}</td>
-                  <td>{a.nama_perkiraan}</td>
-                  <td>{a.kelompok_akun}</td>
-                  <td>{a.kelompok_laporan}</td>
-                  {user.role === "ADMIN" && (
                     <td>
-                      <Link
-                        to={`/perkiraan/edit/${a.kode_perkiraan}`}
-                        className="btn btn-warning mx-2"
-                      >
-                        Ubah
-                      </Link>
-                      <Button
-                        variant="danger"
-                        onClick={() => handleShow(a.kode_perkiraan)}
-                      >
-                        Hapus
-                      </Button>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
                     </td>
-                  )}
-                </tr>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    {props.type === "dashboard" ? (
+                      <></>
+                    ) : (
+                      <td>
+                        <p className="placeholder-glow">
+                          <span className="placeholder col-6 bg-primary"></span>
+                        </p>
+                      </td>
+                    )}
+                  </tr>
+                ))
+              ) : (
+                perkiraanTemporary.map((a, index) =>
+                  props.type === "dashboard" ? (
+                    index < 5 && (
+                      <tr key={index}>
+                        <td>{formatDateTable(a.updatedAt)}</td>
+                        <td>{a.kode_perkiraan}</td>
+                        <td>{a.nama_perkiraan}</td>
+                        <td>{a.kelompok_akun}</td>
+                        <td>{a.kelompok_laporan}</td>
+                      </tr>
+                    )
+                  ) : (
+                    <tr key={index}>
+                      <td>{formatDateTable(a.updatedAt)}</td>
+                      <td>{a.kode_perkiraan}</td>
+                      <td>{a.nama_perkiraan}</td>
+                      <td>{a.kelompok_akun}</td>
+                      <td>{a.kelompok_laporan}</td>
+                      {user.role === "ADMIN" && (
+                        <td>
+                          <Link
+                            to={`/perkiraan/edit/${a.kode_perkiraan}`}
+                            className="btn btn-warning mx-2"
+                          >
+                            Ubah
+                          </Link>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleShow(a.kode_perkiraan)}
+                          >
+                            Hapus
+                          </Button>
+                        </td>
+                      )}
+                    </tr>
+                  )
+                )
               )
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center"
+                  style={{ border: 0, backgroundColor: color.tierary }}
+                >
+                  Data tidak tersedia
+                </td>
+              </tr>
             )}
           </tbody>
         </table>

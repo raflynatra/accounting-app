@@ -39,6 +39,8 @@ const MasterUserTable = (props) => {
     setShow(true);
   };
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const config = {
     headers: {
       "Access-Control-Allow-Origin": true,
@@ -52,8 +54,12 @@ const MasterUserTable = (props) => {
   }, []);
 
   const getAllUser = async () => {
+    setUser(Array(3).fill({}));
+
     let response = await axios.get(`${BASE_URL}/user`);
     setUser(response.data.data);
+
+    setIsLoading(false);
   };
 
   const deleteUser = async (id) => {
@@ -103,30 +109,80 @@ const MasterUserTable = (props) => {
               <th scope="col">Username</th>
               <th scope="col">Email</th>
               <th scope="col">Role</th>
-              <th scope="col">Action</th>
+              <th scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {user.map((a, index) => (
-              <tr key={index}>
-                <td>{formatDateTable(a.createdAt)}</td>
-                <td>{formatDateTable(a.updatedAt)}</td>
-                <td>{a.username}</td>
-                <td>{a.email}</td>
-                <td>{a.role}</td>
-                <td>
-                  <Link
-                    to={`/master-user/edit/${a._id}`}
-                    className="btn btn-warning mx-2"
-                  >
-                    Ubah
-                  </Link>
-                  <Button variant="danger" onClick={() => handleShow(a._id)}>
-                    Hapus
-                  </Button>
+            {user.length > 0 ? (
+              user.map((a, index) =>
+                isLoading ? (
+                  <tr key={index}>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={index}>
+                    <td>{formatDateTable(a.createdAt)}</td>
+                    <td>{formatDateTable(a.updatedAt)}</td>
+                    <td>{a.username}</td>
+                    <td>{a.email}</td>
+                    <td>{a.role}</td>
+                    <td>
+                      <Link
+                        to={`/master-user/edit/${a._id}`}
+                        className="btn btn-warning mx-2"
+                      >
+                        Ubah
+                      </Link>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleShow(a._id)}
+                      >
+                        Hapus
+                      </Button>
+                    </td>
+                  </tr>
+                )
+              )
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center"
+                  style={{ border: 0, backgroundColor: color.tierary }}
+                >
+                  Data tidak tersedia
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
         <Modal show={show} onHide={handleClose}>

@@ -50,6 +50,8 @@ function ArusKasPage() {
     tahunan: false,
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const config = {
     headers: {
       "Access-Control-Allow-Origin": true,
@@ -59,6 +61,7 @@ function ArusKasPage() {
   };
 
   const getArusKasList = async () => {
+    setArusKasList(Array(3).fill({}));
     let response = "";
     let date = new Date();
 
@@ -87,7 +90,7 @@ function ArusKasPage() {
           totalKredit: 0,
           totalSaldo: 0,
         });
-        setArusKasList({});
+        setArusKasList([]);
       }
     } else {
       response = await getAllArusKas(config);
@@ -104,9 +107,10 @@ function ArusKasPage() {
           totalKredit: 0,
           totalSaldo: 0,
         });
-        setArusKasList({});
+        setArusKasList([]);
       }
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -247,15 +251,33 @@ function ArusKasPage() {
             </div>
             <div className="col">
               <h6>Total Debit</h6>
-              <h5>{`Rp${total.totalDebet.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalDebet.toLocaleString("id")}`}</h5>
+              )}
             </div>
             <div className="col">
               <h6>Total Kredit</h6>
-              <h5>{`Rp${total.totalKredit.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalKredit.toLocaleString("id")}`}</h5>
+              )}
             </div>
             <div className="col">
               <h6>Total Saldo</h6>
-              <h5>{`Rp${total.totalSaldo.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalSaldo.toLocaleString("id")}`}</h5>
+              )}
             </div>
           </div>
         </div>
@@ -276,20 +298,65 @@ function ArusKasPage() {
           </thead>
           <tbody>
             {arusKasList.length > 0 ? (
-              arusKasList.map((kas) => (
-                <tr key={kas._id}>
-                  <td>{kas.nomerJurnal}</td>
-                  <td>{formatDateTable(kas.tanggalJurnal)}</td>
-                  <td>{kas.nomerBukti}</td>
-                  <td>{kas.uraian}</td>
-                  <td>{kas.namaPerkiraanJurnal}</td>
-                  <td>{`Rp${kas.debet.toLocaleString("id")}`}</td>
-                  <td>{`Rp${kas.kredit.toLocaleString("id")}`}</td>
-                  <td>{`Rp${(kas.debet - kas.kredit).toLocaleString(
-                    "id"
-                  )}`}</td>
-                </tr>
-              ))
+              arusKasList.map((kas, index) =>
+                isLoading ? (
+                  <tr key={index}>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={kas._id}>
+                    <td>{kas.nomerJurnal}</td>
+                    <td>{formatDateTable(kas.tanggalJurnal)}</td>
+                    <td>{kas.nomerBukti}</td>
+                    <td>{kas.uraian}</td>
+                    <td>{kas.namaPerkiraanJurnal}</td>
+                    <td>{`Rp${kas.debet.toLocaleString("id")}`}</td>
+                    <td>{`Rp${kas.kredit.toLocaleString("id")}`}</td>
+                    <td>{`Rp${(kas.debet - kas.kredit).toLocaleString(
+                      "id"
+                    )}`}</td>
+                  </tr>
+                )
+              )
             ) : (
               <tr>
                 <td

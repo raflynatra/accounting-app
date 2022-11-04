@@ -26,9 +26,13 @@ const styles = {
 function JurnalUmumPage({ type }) {
   const [jurnalList, setJurnalList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+
   const [showToast, setShowToast] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
+
   const user = jwtDecode(localStorage.getItem("token"));
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const config = {
@@ -42,6 +46,7 @@ function JurnalUmumPage({ type }) {
   const getJurnalList = async () => {
     let response = await getAllJurnal(config);
     setJurnalList(response.data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -112,12 +117,13 @@ function JurnalUmumPage({ type }) {
         )}
         <div>
           <JurnalUmumTable
-            jurnalList={jurnalList}
+            jurnalList={isLoading ? Array(3).fill({}) : jurnalList}
             handleDelete={handleDelete}
             navigate={navigate}
             searchValue={searchValue}
             type={type}
             isBukuBesar={user.role === "ADMIN" ? false : true}
+            isLoading={isLoading}
           />
         </div>
       </div>

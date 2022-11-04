@@ -50,6 +50,8 @@ const LabaRugiPage = () => {
     bulanan: false,
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const config = {
     headers: {
       "Access-Control-Allow-Origin": true,
@@ -131,6 +133,7 @@ const LabaRugiPage = () => {
   };
 
   const getLabaRugiList = async () => {
+    setLabaRugiList(Array(3).fill({}));
     let response = "";
     let date = new Date();
 
@@ -163,7 +166,7 @@ const LabaRugiPage = () => {
           totalKredit: 0,
           totalSaldo: 0,
         });
-        setLabaRugiList({});
+        setLabaRugiList([]);
       }
     } else {
       response = await getAllLabaRugi();
@@ -180,9 +183,11 @@ const LabaRugiPage = () => {
           totalKredit: 0,
           totalSaldo: 0,
         });
-        setLabaRugiList({});
+        setLabaRugiList([]);
       }
     }
+
+    setIsLoading(false);
   };
 
   const downloadPDF = async () => {
@@ -303,17 +308,39 @@ const LabaRugiPage = () => {
             </div>
             <div className="col ">
               <h6>Total Debit</h6>
-              <h5>{`Rp${parseInt(total.totalDebet).toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${parseInt(total.totalDebet).toLocaleString(
+                  "id"
+                )}`}</h5>
+              )}
             </div>
             <div className="col ">
               <h6>Total Kredit</h6>
-              <h5>{`Rp${parseInt(total.totalKredit).toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${parseInt(total.totalKredit).toLocaleString(
+                  "id"
+                )}`}</h5>
+              )}
             </div>
             <div className="col ">
               <h6>Total Saldo</h6>
-              <h5>{`Rp${parseFloat(total.totalSaldo).toLocaleString(
-                "id"
-              )}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${parseFloat(total.totalSaldo).toLocaleString(
+                  "id"
+                )}`}</h5>
+              )}
             </div>
           </div>
         </div>
@@ -334,16 +361,51 @@ const LabaRugiPage = () => {
           </thead>
           <tbody>
             {labaRugiList.length > 0 ? (
-              labaRugiList.map((a, index) => (
-                <tr key={index}>
-                  <td>{formatDateTable(a._id.tanggalJurnal)}</td>
-                  <td>{a._id.namaPerkiraan}</td>
-                  <td>{a._id.kodePerkiraan}</td>
-                  <td>Rp{a.debet.toLocaleString("id")}</td>
-                  <td>Rp{a.kredit.toLocaleString("id")}</td>
-                  <td>Rp{(a.debet - a.kredit).toLocaleString("id")}</td>
-                </tr>
-              ))
+              labaRugiList.map((a, index) =>
+                isLoading ? (
+                  <tr key={index}>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={index}>
+                    <td>{formatDateTable(a._id.tanggalJurnal)}</td>
+                    <td>{a._id.namaPerkiraan}</td>
+                    <td>{a._id.kodePerkiraan}</td>
+                    <td>Rp{a.debet.toLocaleString("id")}</td>
+                    <td>Rp{a.kredit.toLocaleString("id")}</td>
+                    <td>Rp{(a.debet - a.kredit).toLocaleString("id")}</td>
+                  </tr>
+                )
+              )
             ) : (
               <tr>
                 <td

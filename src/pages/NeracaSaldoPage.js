@@ -50,6 +50,8 @@ function NeracaSaldoPage() {
     bulanan: false,
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const config = {
     headers: {
       "Access-Control-Allow-Origin": true,
@@ -59,6 +61,8 @@ function NeracaSaldoPage() {
   };
 
   const getNeracaSaldoList = async () => {
+    setNeracaSaldoList(Array(3).fill({}));
+
     let response = "";
     let date = new Date();
 
@@ -87,7 +91,7 @@ function NeracaSaldoPage() {
           totalKredit: 0,
           totalSaldo: 0,
         });
-        setNeracaSaldoList({});
+        setNeracaSaldoList([]);
       }
     } else {
       response = await getAllNeracaSaldo(config);
@@ -104,9 +108,10 @@ function NeracaSaldoPage() {
           totalKredit: 0,
           totalSaldo: 0,
         });
-        setNeracaSaldoList({});
+        setNeracaSaldoList([]);
       }
     }
+    setIsLoading(false);
   };
 
   const downloadPDF = async () => {
@@ -247,15 +252,33 @@ function NeracaSaldoPage() {
             </div>
             <div className="col">
               <h6>Total Debit</h6>
-              <h5>{`Rp${total.totalDebet.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalDebet.toLocaleString("id")}`}</h5>
+              )}
             </div>
             <div className="col">
               <h6>Total Kredit</h6>
-              <h5>{`Rp${total.totalKredit.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalKredit.toLocaleString("id")}`}</h5>
+              )}
             </div>
             <div className="col">
               <h6>Total Saldo</h6>
-              <h5>{`Rp${total.totalSaldo.toLocaleString("id")}`}</h5>
+              {isLoading ? (
+                <p className="placeholder-glow">
+                  <span className="placeholder col-12 bg-primary"></span>
+                </p>
+              ) : (
+                <h5>{`Rp${total.totalSaldo.toLocaleString("id")}`}</h5>
+              )}
             </div>
           </div>
         </div>
@@ -273,17 +296,47 @@ function NeracaSaldoPage() {
           </thead>
           <tbody>
             {neracaSaldoList.length > 0 ? (
-              neracaSaldoList.map((neraca, index) => (
-                <tr key={index}>
-                  <td>{neraca._id.kodePerkiraan}</td>
-                  <td>{neraca._id.namaPerkiraan}</td>
-                  <td>{`Rp${neraca.Debet.toLocaleString("id")}`}</td>
-                  <td>{`Rp${neraca.Kredit.toLocaleString("id")}`}</td>
-                  <td>{`Rp${(neraca.Debet - neraca.Kredit).toLocaleString(
-                    "id"
-                  )}`}</td>
-                </tr>
-              ))
+              neracaSaldoList.map((neraca, index) =>
+                isLoading ? (
+                  <tr key={index}>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                    <td>
+                      <p className="placeholder-glow">
+                        <span className="placeholder col-12 bg-primary"></span>
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={index}>
+                    <td>{neraca._id.kodePerkiraan}</td>
+                    <td>{neraca._id.namaPerkiraan}</td>
+                    <td>{`Rp${neraca.Debet.toLocaleString("id")}`}</td>
+                    <td>{`Rp${neraca.Kredit.toLocaleString("id")}`}</td>
+                    <td>{`Rp${(neraca.Debet - neraca.Kredit).toLocaleString(
+                      "id"
+                    )}`}</td>
+                  </tr>
+                )
+              )
             ) : (
               <tr>
                 <td
