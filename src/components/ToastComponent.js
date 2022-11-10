@@ -14,10 +14,15 @@ function ToastComponent({ response, show, handleClose }) {
       autohide
     >
       <Toast.Header>
-        <h5 className="me-auto">{response.header}</h5>
+        <h5 className="me-auto">{`${response.status}!`}</h5>
       </Toast.Header>
-      <Toast.Body className={response.variant === "danger" && "text-white"}>
-        {response.message}
+      <Toast.Body
+        className={
+          (response.variant === "danger" || response.variant === "success") &&
+          "text-white"
+        }
+      >
+        {response.statusMessage}
       </Toast.Body>
     </Toast>
   );

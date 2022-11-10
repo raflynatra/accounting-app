@@ -1,19 +1,22 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { color } from "../utils/Helper";
-const styles = {
-  button: {
-    backgroundColor: color.primary,
-    color: color.white,
-    textDecoration: "none",
-    "&:hover": {
-      backgroundColor: color.secondary,
-    },
-  },
-};
 
 function NavApp({ pageTitle, user }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch({
+      type: "SET_AUTH_RESPONSE",
+      payload: {},
+    });
+
+    navigate("/login");
+  };
+
   return (
     <div>
       <nav
@@ -37,10 +40,7 @@ function NavApp({ pageTitle, user }) {
                   <span
                     style={{ cursor: "pointer" }}
                     className="dropdown-item"
-                    onClick={() => {
-                      localStorage.removeItem("token");
-                      navigate("/login");
-                    }}
+                    onClick={handleLogout}
                   >
                     Logout
                   </span>

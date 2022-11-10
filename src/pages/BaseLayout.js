@@ -1,10 +1,12 @@
-import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Outlet, useLocation } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Footer from "../components/Footer";
 import NavApp from "../components/NavApp";
+import { checkTokenExpiration } from "../components/RequireAuth";
 import Sidebar from "../components/Sidebar";
+import ToastComponent from "../components/ToastComponent";
 import { color } from "../utils/Helper";
 
 const styles = {
@@ -26,25 +28,15 @@ const styles = {
 
 function BaseLayout({ user }) {
   const [pageTitle, setPageTitle] = useState("");
+  const { response } = useSelector((state) => state.responseReducer);
+
+  const [showToast, setShowToast] = useState(false);
 
   const location = useLocation();
   let currRoutes = [];
   currRoutes = location.pathname !== "/" ? location.pathname.split("/") : [];
   currRoutes.length > 0 && currRoutes.shift();
   const path = currRoutes[0];
-
-  const navigate = useNavigate();
-
-  const checkTokenExpiration = () => {
-    const decodeToken = jwtDecode(localStorage.getItem("token"));
-    const currDate = new Date();
-
-    if (decodeToken.exp * 1000 < currDate.getTime()) {
-      alert("Token Expired!");
-      navigate("/login");
-      localStorage.removeItem("token");
-    }
-  };
 
   useEffect(() => {
     checkTokenExpiration();
@@ -72,6 +64,16 @@ function BaseLayout({ user }) {
     }
   }, [currRoutes.length, path]);
 
+  useEffect(() => {
+    if (Object.keys(response).length > 0) {
+      setShowToast(true);
+    }
+  }, [response]);
+
+  const handleClose = () => {
+    setShowToast(false);
+  };
+
   return (
     <div className="container-fluid">
       <div className="row" style={styles.row}>
@@ -83,6 +85,12 @@ function BaseLayout({ user }) {
           <div className="my-3 p-3 rounded" style={styles.content}>
             <Breadcrumbs pathname={currRoutes} />
             <Outlet />
+
+            <ToastComponent
+              response={response}
+              show={showToast}
+              handleClose={handleClose}
+            />
           </div>
           <Footer />
         </div>

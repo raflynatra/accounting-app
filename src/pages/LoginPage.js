@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import loginIllu from "../assets/img/logo-illu.jpg";
 import logo from "../assets/img/app-logo.svg";
 import { color } from "../utils/Helper";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { BASE_URL } from "../utils/Helper";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/actions/UserAction";
 
 const styles = {
   container: {
@@ -46,12 +46,23 @@ const styles = {
 };
 
 function LoginPage() {
+  const dispatch = useDispatch();
+  const { authResponse } = useSelector((state) => state.responseReducer);
+  const [isError, setIsError] = useState(false);
+  const token = localStorage.getItem("token");
+
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    if (Object.keys(authResponse).length > 0) {
+      setIsError(true);
+    }
+  }, [authResponse, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,20 +74,7 @@ function LoginPage() {
       },
     };
 
-    try {
-      let response = await axios.post(
-        `${BASE_URL}/user/signin`,
-        payload,
-        config
-      );
-
-      const accessToken = `JWT ${response.data.accessToken}`;
-      localStorage.setItem("token", accessToken);
-
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(loginUser(payload, config, navigate, from));
   };
 
   return (
@@ -134,7 +132,15 @@ function LoginPage() {
                 </button>
               </div>
             </form>
-            <span className="mt-5 text-center">
+            <hr style={{ marginTop: "30px" }} />
+            {isError && (
+              <span
+                className={`mt-0 text-center text-${authResponse.variant} fw-semibold`}
+              >
+                {authResponse.statusMessage}
+              </span>
+            )}
+            <span className="mt-2 text-center">
               Made with &#128156; by Grup 3 MERN Juara Coding
             </span>
           </div>
